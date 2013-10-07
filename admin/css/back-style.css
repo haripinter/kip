@@ -1,0 +1,93 @@
+.no-shadow{
+	text-shadow: none;
+	font-family: Ubuntu;
+}
+
+.home-width{
+	max-width: 960px;
+	margin: 0px auto;
+}
+
+.home-header{
+	height:90px;
+	margin:-25px auto 0;
+	border-radius: 5px;
+	background-color: #fcc012;
+	background: url('../img/head.jpg') repeat-x scroll 0 0 transparent;
+	background-size: 100% 100%;
+	border: 1px solid #FFF;
+}
+
+.capital-head{
+	color: #FFF;
+	---text-shadow: 0px 0px 1px #FF33FF;
+	text-shadow: 1px 1px 3px #888;
+	font-family: Verdana;
+	font-weight: bold;
+	font-size: 1.9em;
+	padding-left: 2%;
+}
+
+.customer-tabs{
+	margin-left: 0px !important;
+	margin-right: 20px !important;
+}
+
+.mandiri{
+	background: url('../img/logo.gif') repeat-x scroll 0 0 transparent;
+	width:199px;
+	height:58px;
+	float:right;
+	margin-right: 2.5%;
+	margin-top: 1.1%;
+	/**margin-top:-4em;
+	margin-bottom: 0em;*/
+}
+
+.menuku{
+	margin-left:0px;
+	margin-right:0px;
+}
+
+.nav-stacked > li > a {
+	margin-left: 1px;
+    margin-right: 1px;
+}
+
+.home-spread{
+	width: 100%;
+	height:100%;
+	border:1px solid #fff;
+	border-radius: 5px;
+	float: none;
+}
+
+.home-logo{
+	height:120%;
+	float: right;
+	margin-top: 0.8em;
+	margin-bottom: -2em;
+	margin-right: 5%;
+	z-index: 1111;
+}
+
+.home-pad-header{
+	background-color: #013066;
+	background-image: none;
+}
+
+.brand{
+	color: orange;
+}
+
+.carousel-indicators li {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 5px 5px 5px 5px;
+    display: block;
+    float: left;
+    height: 10px;
+    margin-left: 5px;
+    text-indent: -999px;
+    width: 10px;
+}
+
