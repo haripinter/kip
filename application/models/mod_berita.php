@@ -5,7 +5,7 @@ class mod_berita extends CI_Model{
 	function get($id_berita){
 		$res = array();
 		if(is_numeric($id_berita)){
-			$sql = "SELECT * FROM dinamic_posts WHERE post_id=".$id_berita;
+			$sql = "SELECT * FROM dinamic_posts WHERE ISNULL(post_static) AND post_id=".$id_berita;
 			$res = $this->mysql->get_data($sql);
 		}
 		return $res;
@@ -16,7 +16,7 @@ class mod_berita extends CI_Model{
 	// request_order string 'desc'|'asc'
 	// limit int
 	function get_all($order='',$request_order='ASC',$limit=0){
-		$sql = "SELECT * FROM dinamic_posts";
+		$sql = "SELECT * FROM dinamic_posts WHERE ISNULL(post_static)";
 		if($request_order=='DESC'){
 			$request_order = 'DESC';
 		}else{
@@ -41,7 +41,7 @@ class mod_berita extends CI_Model{
 	// Input berita
 	function insert($berita){
 		if($berita['post_id']>0){
-			mysql_query("UPDATE dinamic_posts SET post_created='".$berita['start']."', post_updated=NOW(), post_expired='".$berita['stop']."', post_title='".$berita['judul']."', post_content='".$berita['isi']."',post_marquee='".$berita['marquee']."' WHERE post_id=".$berita['post_id']);
+			mysql_query("UPDATE dinamic_posts SET post_created='".$berita['start']."', post_updated=NOW(), post_expired='".$berita['stop']."', post_title='".$berita['judul']."', post_content='".$berita['isi']."',post_marquee='".$berita['marquee']."' WHERE ISNULL(post_static) AND post_id=".$berita['post_id']);
 			
 		}else{
 			$maxid = $this->mysql->get_maxid('post_id','dinamic_posts');
@@ -51,7 +51,7 @@ class mod_berita extends CI_Model{
 	
 	// Delete berita
 	function delete($id_berita){
-		mysql_query("DELETE FROM dinamic_posts WHERE post_id=".$id_berita);
+		mysql_query("DELETE FROM dinamic_posts WHERE ISNULL(post_static) AND post_id=".$id_berita);
 	}
 }
 ?>

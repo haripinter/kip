@@ -83,11 +83,11 @@ $_app = $site_url.'/index.php/root/';
 						<li><a href="<?php echo $_app; ?>permohonan"><i class="icon-picture"></i><span class="hidden-tablet"> Permohonan IP</span></a></li>
 						<li><a href="<?php echo $_app; ?>pengaduan"><i class="icon-picture"></i><span class="hidden-tablet"> Pengaduan</span></a></li>
 						<!--li><a href="<?php echo $_app; ?>"><i class="icon-random"></i><span class="hidden-tablet"> Pesan</span></a></li-->
-						<!--li><a href="<?php echo $_app; ?>"><i class="icon-random"></i><span class="hidden-tablet"> Komentar</span></a></li-->
 						
 						<li class="nav-header hidden-tablet">Menu Website</li>
 						<li><a href="<?php echo $_app; ?>informasi"><i class="icon-picture"></i><span class="hidden-tablet"> Informasi Statis</span></a></li>
 						<li><a href="<?php echo $_app; ?>berita"><i class="icon-picture"></i><span class="hidden-tablet"> Berita</span></a></li>
+						<li><a href="<?php echo $_app; ?>komentar"><i class="icon-random"></i><span class="hidden-tablet"> Komentar</span></a></li>
 						<!--li><a href="<?php echo $_app; ?>gambar"><i class="icon-list-alt"></i><span class="hidden-tablet"> Galeri Foto</span></a></li>
 						<li><a href="<?php echo $_app; ?>"><i class="icon-bullhorn"></i><span class="hidden-tablet"> Galeri Video</span></a></li>
 						<li><a href="<?php echo $_app; ?>"><i class="icon-bullhorn"></i><span class="hidden-tablet"> Berkas</span></a></li-->
