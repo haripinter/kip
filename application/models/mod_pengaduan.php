@@ -105,7 +105,7 @@ class mod_pengaduan extends CI_Model{
 	}
 	
 	function set_status($data){
-		$this->mysql->query("UPDATE dinamic_complains SET complain_status='".$data['status']."', complain_status_reason='".$data['reason']."' WHERE complain_id=".$data['complain']);
+		$this->mysql->query("UPDATE dinamic_complains SET complain_nomor='".$data['nomor']."', complain_status='".$data['status']."', complain_status_reason='".$data['reason']."' WHERE complain_id=".$data['complain']);
 		return $this->get_status($data['complain']);
 	}
 }

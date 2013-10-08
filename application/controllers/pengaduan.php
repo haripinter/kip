@@ -26,7 +26,7 @@ class pengaduan extends CI_Controller{
 				$tmp['complain_id'] = (isset($_POST['id_komplain']))? $_POST['id_komplain'] : 0;
 				$tmp['reason'] = (isset($_POST['alasan']))? $_POST['alasan'] : array();
 				$tmp['case'] = (isset($_POST['kasus']))? $_POST['kasus'] : '';
-				$tmp['date'] = (isset($_POST['tanggal']))? $_POST['tanggal'] : date('Y-m-d');
+				$tmp['date'] = (isset($_POST['tanggal']))? $_POST['tanggal'] : date('Y/m/d');
 				
 				$tmp['date'] = $this->kip->tgl_datetime($tmp['date']);
 				
@@ -56,8 +56,12 @@ class pengaduan extends CI_Controller{
 		$tmp = $data;
 		$tmp['complain'] = $this->mod_pengaduan->get($complain_id);
 		$tmp['alasan_pengaduan'] = $this->mod_pengaduan->alasan_pengaduan();
-		
-		$data['content'] = $this->load->view('admin/modul/front_pengaduan',$tmp,true);
+		$tmp['status_default'] = $this->mod_pengaduan->status('default');
+		if($tmp['status_default']['status']==$tmp['complain']['complain_status']){
+			$data['content'] = $this->load->view('admin/modul/front_pengaduan',$tmp,true);
+		}else{
+			$data['content'] = $this->load->view('admin/modul/front_pengaduan_view',$tmp,true);
+		}
 		$this->load->view('skins/default/index',$data);
 	}
 	

@@ -32,7 +32,7 @@ $_app = $site_url.'/index.php/root/';
 					<td width="3px">&nbsp;</td>
 					<td width="30%">Nomor Registrasi Pengaduan *</td>
 					<td width="3px">:</td>
-					<td><label style="color:#ddd"><i>(diisi petugas)</i></label></td>
+					<td><?php echo @$complain['complain_nomor']; ?><span style="color:#ddd"><i>(diisi petugas)</i></span></td>
 				</tr>
 				<tr>
 					<td>&nbsp;</td>
@@ -144,7 +144,7 @@ $_app = $site_url.'/index.php/root/';
 					</td>
 				</tr>
 				
-				<tr>
+				<!--tr>
 					<td><b>D.</b></td>
 					<td colspan="3"><b>HARI/TANGGAL TANGGAPAN ATAS PENGADUAN AKAN DIBERIKAN ****</b></td>
 				</tr>
@@ -153,7 +153,7 @@ $_app = $site_url.'/index.php/root/';
 					<td colspan="3">
 						<input type="text" class="text-form span12 tanggalan" name="tanggal" value="<?php echo datetime_tgl(@$complain['complain_date']); ?>">
 					</td>
-				</tr>
+				</tr-->
 				
 				
 				<tr>
@@ -183,10 +183,10 @@ $_app = $site_url.'/index.php/root/';
 						<td valign="top">***</td>
 						<td>Sesuai dengan Pasal 35 UU KIP, dipilih oleh pengaju keberatan sesuai dengan alasan keberatan yang diajukan</td>
 					</tr>
-					<tr>
+					<!---tr>
 						<td valign="top">****</td>
 						<td>Diisi sesuai dengan ketentuan jangka waktu dalam UU KIP</td>
-					</tr>
+					</tr-->
 					<tr>
 						<td valign="top">*****</td>
 						<td>Tanggal diisi dengan tanggal diterimanya pengajuan keberatan yaitu sejak keberatan dinyatakan lengkap sesuai dengan buku register pengajuan keberatan</td>

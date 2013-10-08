@@ -246,6 +246,6 @@ $(function () {
 	});
 	
 	$('.bt-view').click(function(){
-		//location.href = '<?php echo $site_url; ?>/index.php/root/pengaduan/view/'+this.name;
+		location.href = '<?php echo $site_url; ?>/index.php/root/pengaduan/view/'+this.name;
 	});
 </script>

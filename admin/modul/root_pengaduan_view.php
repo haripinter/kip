@@ -14,24 +14,14 @@ $_app = $site_url.'/index.php/root/';
 			padding: 3px;
 		}
 	</style>
-	<?php
-	if(@$status_default['status']==@$complain['complain_status']){
-	?>
-	<div align="right">
-		<form action="<?php echo $site_url; ?>/index.php/pengaduan/edit/<?php echo intval(@$complain['complain_id']); ?>">
-			<button type="submit" class="btn btn-success">Edit</button>
-		</form>
-	</div>
-	<?php
-	}
-	?>
-	
-	<div style="padding:10px">
-	<center><?php echo $kop_surat; ?></center>
-	<hr/>
-	
-	<center><h4>PENGADUAN ATAS PERMOHONAN INFORMASI</h4></center>
-	<br/>.
+<div class="row-fluid sortable">
+	<div class="box span7">
+		<div class="box-header well" data-original-title>
+			<h2><i class="icon-picture"></i> INFORMASI PENGADUAN</h2>
+		</div>
+		<div class="box-berita" style="padding:10px">
+		
+		
 	<form method="POST" action="<?php echo $site_url; ?>/index.php/pengaduan" enctype="multipart/form-data">
 		<input type="hidden" name="id_komplain" value="<?php echo @$complain['complain_id']; ?>">
 		<table class="table-form" cellpadding="0" cellspacing="0" width="100%">
@@ -40,16 +30,16 @@ $_app = $site_url.'/index.php/root/';
 					<td><b>A.</b></td>
 					<td colspan="3"><b>INFORMASI PENGAJU PENGADUAN</b></td>
 				</tr>
-				<tr>
+				<!--tr>
 					<td width="3px">&nbsp;</td>
 					<td width="30%">Nomor Registrasi Pengaduan *</td>
 					<td width="3px">:</td>
-					<td><?php echo @$complain['complain_nomor']; ?> <span style="color:#ddd"><i>(diisi petugas)</i></span></td>
-				</tr>
+					<td><label style="color:#ddd"><i>(diisi petugas)</i></label></td>
+				</tr-->
 				<tr>
-					<td>&nbsp;</td>
-					<td>Nomor Pendaftaran Pengajuan Informasi</td>
-					<td>:</td>
+					<td width="3px">&nbsp;</td>
+					<td width="30%">Nomor Pendaftaran Pengajuan Informasi</td>
+					<td width="3px">:</td>
 					<td><?php echo @$complain['user_ktp']; ?></td>
 				</tr>
 				<tr>
@@ -154,18 +144,6 @@ $_app = $site_url.'/index.php/root/';
 					<td colspan="3"><?php echo @$complain['complain_case']; ?></td>
 				</tr>
 				
-				<tr>
-					<td><b>D.</b></td>
-					<td colspan="3"><b>STATUS</b></td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
-					<td colspan="3">
-						<?php echo @$complain['complain_status']; ?><br/><br/>
-						<b>Keterangan :</b><br/>
-						<?php echo @$complain['complain_status_reason']; ?><br/>
-					</td>
-				</tr>
 				<!--tr>
 					<td><b>D.</b></td>
 					<td colspan="3"><b>HARI/TANGGAL TANGGAPAN ATAS PENGADUAN AKAN DIBERIKAN ****</b></td>
@@ -177,4 +155,72 @@ $_app = $site_url.'/index.php/root/';
 			</tbody>
 		</table>
 	</form>
+
+	
 	</div>
+	</div>
+	<div class="box span5">
+		<div class="box-header well" data-original-title>
+			<h2><i class="icon-picture"></i> RESPON</h2>
+		</div>
+		<div class="box-berita" style="padding:10px">
+			<table style="padding:5px" width="100%">
+				<tr>
+					<td valign="top">No. Registrasi</td>
+					<td valign="top">:</td>
+					<td>
+						<input type="text" name="nomor" id="nomor" value="<?php echo @$complain['complain_nomor']; ?>">
+					</td>
+				</tr>
+				<tr>
+					<td>Status</td>
+					<td>:</td>
+					<td>
+						<select name="status" id="status">
+							<?php
+							foreach($status as $stat){
+								$select = '';
+								if($stat==$complain['complain_status']) $select = 'selected="selected"';
+								echo "<option value='".$stat."' ".$select.">".$stat."</option>";
+							}
+							?>
+						</select>
+					</td>
+				</tr>
+				<!--tr>
+					<td valign="top">Tanggal Tanggapan</td>
+					<td valign="top">:</td>
+					<td>
+						<input type="text" name="nomor" id="nomor" value="<?php echo datetime_tgl(@$complain['complain_date']); ?>"><br/>
+					</td>
+				</tr-->
+				<tr>
+					<td valign="top">Alasan</td>
+					<td valign="top">:</td>
+					<td>
+						<textarea class="span11" style="height:160px" name="reason" id="reason"><?php echo @$complain['complain_status_reason']; ?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td><label id="result"></label></td>
+					<td valign="top">&nbsp;</td>
+					<td>
+						<a class="btn btn-success bt-simpan">Simpan</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+<script>
+	$('.bt-simpan').click(function(){
+		$('#result').html('Wait...');
+		var url = '<?php echo $site_url; ?>/index.php/popup/pengaduan_save';
+		var post = $.post(url,{complain:<?php echo @$complain['complain_id']; ?>, status:$('#status').val(), reason:$('#reason').val(), nomor:$('#nomor').val()});
+		post.done(function(data){
+			if(data=='OK'){
+				$('#result').html('tersimpan.');
+			}
+		});
+	});
+</script>

@@ -238,7 +238,7 @@ $_app = $site_url.'/index.php/root/';
 <script>
 	$('.bt-simpan').click(function(){
 		$('#result').html('Wait...');
-		var url = '<?php echo $site_url; ?>/index.php/popup/save_status';
+		var url = '<?php echo $site_url; ?>/index.php/popup/permohonan_save';
 		var post = $.post(url,{request:<?php echo @$request['request_id']; ?>, status:$('#status').val(), reason:$('#reason').val(), nomor:$('#nomor').val()});
 		post.done(function(data){
 			if(data=='OK'){

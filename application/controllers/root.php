@@ -132,9 +132,10 @@ class root extends CI_Controller {
 		
 		$tmp = $data;
 		if($mode=='view'){
-			//$tmp['status'] = $this->mod_pengaduan->status();
-			//$tmp['complain'] = $this->mod_pengaduan->get($request_id);
-			//$data['content'] = $this->load->view('admin/modul/root_pengaduan_view',$tmp,true);
+			$tmp['status'] = $this->mod_pengaduan->status();
+			$tmp['complain'] = $this->mod_pengaduan->get($complain_id);
+			$tmp['alasan_pengaduan'] = $this->mod_pengaduan->alasan_pengaduan();
+			$data['content'] = $this->load->view('admin/modul/root_pengaduan_view',$tmp,true);
 		}else{
 			$tmp['alasan_pengaduan'] = $this->mod_pengaduan->get_alasan();
 			$tmp['statistik_status'] = $this->mod_pengaduan->statistic();

@@ -94,6 +94,13 @@ class popup extends CI_Controller {
 			?>
 			<table style="padding:5px" width="100%">
 				<tr>
+					<td valign="top">No. Registrasi</td>
+					<td valign="top">:</td>
+					<td>
+						<input type="text" name="nomor" id="nomor" value="<?php echo @$complain['complain_nomor']; ?>">
+					</td>
+				</tr>
+				<tr>
 					<td>Status</td>
 					<td>:</td>
 					<td>
@@ -127,7 +134,7 @@ class popup extends CI_Controller {
 				$('.bt-simpan').click(function(){
 					$('#result').html('Wait...');
 					var url = '<?php echo $data['site_url']; ?>/index.php/popup/pengaduan_save';
-					var post = $.post(url,{complain:<?php echo $complain_id; ?>, status:$('#status').val(), reason:$('#reason').val()});
+					var post = $.post(url,{complain:<?php echo $complain_id; ?>, status:$('#status').val(), reason:$('#reason').val(), nomor:$('#nomor').val()});
 					post.done(function(data){
 						if(data=='OK'){
 							$('#result').html('tersimpan.');
@@ -149,6 +156,7 @@ class popup extends CI_Controller {
 			$tmp['complain'] = (isset($_POST['complain']) && intval($_POST['complain'])>0) ? $_POST['complain'] : '';
 			$tmp['status'] = (isset($_POST['status']) && in_array($_POST['status'],$status)) ? $_POST['status'] : '';
 			$tmp['reason'] = (isset($_POST['reason']) && $_POST['reason']!=null) ? $_POST['reason'] : '';
+			$tmp['nomor'] = (isset($_POST['nomor']) && $_POST['nomor']!=null) ? $_POST['nomor'] : '';
 			if($tmp['complain']!='' && $tmp['status']!=''){
 				$res = $this->mod_pengaduan->set_status($tmp);
 				if($res==$tmp['status']){

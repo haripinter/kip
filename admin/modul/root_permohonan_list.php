@@ -228,7 +228,7 @@ $(function () {
 <script>
 	$('.bt-edit').click(function(){
 		$('.permohonan-body').html('Wait...');
-		var url = '<?php echo $site_url; ?>/index.php/popup/change_status/'+this.name;
+		var url = '<?php echo $site_url; ?>/index.php/popup/status_permohonan/'+this.name;
 		var get = $.get(url);
 		get.done(function(data){
 			$('.permohonan-body').html(data);
