@@ -17,8 +17,8 @@ $_app = $site_url.'/index.php/root/';
 	
 	<link href="<?php echo $root_path; ?>css/back-style.css" rel="stylesheet">
 	<link href="<?php echo $root_path; ?>css/kip.css" rel="stylesheet">
-	
-	<link href='<?php echo $root_path; ?>css/style.css' rel='stylesheet'>
+	<link href="<?php echo $root_path; ?>css/jquery.fileupload-ui.css" rel="stylesheet" >
+	<link href='<?php echo $root_path; ?>css/style.css' rel="stylesheet">
 	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
 	<!--[if lt IE 9]>
 	  <script src="<?php echo $root_path; ?>js/html5.js"></script>
@@ -87,10 +87,10 @@ $_app = $site_url.'/index.php/root/';
 						<li class="nav-header hidden-tablet">Menu Website</li>
 						<li><a href="<?php echo $_app; ?>informasi"><i class="icon-picture"></i><span class="hidden-tablet"> Informasi Statis</span></a></li>
 						<li><a href="<?php echo $_app; ?>berita"><i class="icon-picture"></i><span class="hidden-tablet"> Berita</span></a></li>
-						<li><a href="<?php echo $_app; ?>komentar"><i class="icon-random"></i><span class="hidden-tablet"> Komentar</span></a></li>
+						<!--li><a href="<?php echo $_app; ?>komentar"><i class="icon-random"></i><span class="hidden-tablet"> Komentar</span></a></li-->
 						<!--li><a href="<?php echo $_app; ?>gambar"><i class="icon-list-alt"></i><span class="hidden-tablet"> Galeri Foto</span></a></li>
 						<li><a href="<?php echo $_app; ?>"><i class="icon-bullhorn"></i><span class="hidden-tablet"> Galeri Video</span></a></li-->
-						<li><a href="<?php echo $_app; ?>"><i class="icon-bullhorn"></i><span class="hidden-tablet"> Berkas</span></a></li>
+						<li><a href="<?php echo $_app; ?>download"><i class="icon-bullhorn"></i><span class="hidden-tablet"> Dokumen Publik</span></a></li>
 						
 						<li class="nav-header hidden-tablet">Pengaturan Aplikasi</li>
 						<li><a href="<?php echo $_app; ?>"><i class="icon-th-list"></i><span class="hidden-tablet"> Pengguna</span></a></li>

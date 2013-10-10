@@ -218,6 +218,45 @@ class root extends CI_Controller {
 		$this->load->view('admin/admin',$data);
 	}
 	
+	function download($mode=null,$id_media=null){
+		$this->load->model('mod_setting');
+		$this->load->model('mod_download');
+		
+		$data = $this->kip->data();
+		$data['site_url'] = $this->mod_setting->site_url();
+		$data['root_path'] = $data['site_url'].'/admin/';
+		
+		$tmp = $data;
+		
+		if($mode=='upload'){
+		}else if($mode=='delete'){
+			if(isset($id_media)) $dmb['media_id'] = intval($id_media);
+			$dmb = $this->mod_download->get($dmb['media_id']);
+			if(isset($dmb['media_key'])){
+				$folder = 'media/';
+				if($dmb['media_key']=='download'){
+					$folder .= 'berkas/';
+				}
+				
+				if($dmb['media_realname']!='' && file_exists($folder.$dmb['media_realname'])){
+					unlink($folder.$dmb['media_realname']);
+				}
+				
+				if($dmb['media_thumbnail']!='' && file_exists($folder.'thumbnail/'.$dmb['media_thumbnail'])){
+					unlink($folder.'thumbnail/'.$dmb['media_thumbnail']);
+				}
+				
+				$this->mod_download->delete($dmb['media_key'],$dmb['media_id']);
+			}
+			$tmp['download'] = $this->mod_download->get_all('download','date','DESC');
+			$data['content'] = $this->load->view('admin/modul/root_download',$tmp,true);
+		}else{
+			$tmp['download'] = $this->mod_download->get_all('download','date','DESC');
+			$data['content'] = $this->load->view('admin/modul/root_download',$tmp,true);
+		}
+		$this->load->view('admin/admin',$data);
+	}
+	
 	/*
 	function gambar($id_gambar=null,$mode=null){
 		$data['root_path'] = 'http://localhost/airputih/admin/';
