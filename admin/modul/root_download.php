@@ -72,20 +72,25 @@ $_app = $site_url.'/index.php/root/';
 		});
 	});
 	
-	$('.bt-remove').click(function(){
-		//var btn = $(this);
-		var media_id = this.name;
-		bootbox.confirm("Anda yakin akan menghapus konten ini?", function(result) {
-			if(result==true){
-				location.href='<?php echo $_app; ?>download/delete/'+media_id;
-				//var url  = '<?php echo $site_url; ?>/index.php/root/download';
-				//var post = $.post(url,{media: media_id});
-				//post.done(function(data){
-				//	if(data=='OK'){
-				//		btn.parent().parent().remove();
-				//	}
-				//});
-			}
+	function init(){
+		$('.bt-remove').click(function(){
+			var btn = $(this);
+			var media_id = this.name;
+			bootbox.confirm("Anda yakin akan menghapus konten ini?", function(result) {
+				if(result==true){
+					var url  = '<?php echo $site_url; ?>/index.php/popup/media_del';
+					var post = $.post(url,{media: media_id});
+					post.done(function(data){
+						if(data=='OK'){
+							var tr = btn.parent().parent();
+							var tabel = $('.datatable').dataTable();
+							tabel.fnDeleteRow(tr.index());
+						}
+					});
+				}
+			});
 		});
-	});
+	}
+	
+	init();
 </script>
