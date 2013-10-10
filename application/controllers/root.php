@@ -229,27 +229,6 @@ class root extends CI_Controller {
 		$tmp = $data;
 		
 		if($mode=='upload'){
-		}else if($mode=='delete'){
-			if(isset($id_media)) $dmb['media_id'] = intval($id_media);
-			$dmb = $this->mod_download->get($dmb['media_id']);
-			if(isset($dmb['media_key'])){
-				$folder = 'media/';
-				if($dmb['media_key']=='download'){
-					$folder .= 'berkas/';
-				}
-				
-				if($dmb['media_realname']!='' && file_exists($folder.$dmb['media_realname'])){
-					unlink($folder.$dmb['media_realname']);
-				}
-				
-				if($dmb['media_thumbnail']!='' && file_exists($folder.'thumbnail/'.$dmb['media_thumbnail'])){
-					unlink($folder.'thumbnail/'.$dmb['media_thumbnail']);
-				}
-				
-				$this->mod_download->delete($dmb['media_key'],$dmb['media_id']);
-			}
-			$tmp['download'] = $this->mod_download->get_all('download','date','DESC');
-			$data['content'] = $this->load->view('admin/modul/root_download',$tmp,true);
 		}else{
 			$tmp['download'] = $this->mod_download->get_all('download','date','DESC');
 			$data['content'] = $this->load->view('admin/modul/root_download',$tmp,true);

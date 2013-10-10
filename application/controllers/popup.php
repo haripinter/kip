@@ -193,7 +193,6 @@ class popup extends CI_Controller {
 			/*global window, $ */
 			$(function () {
 				'use strict';
-				// Change this to the location of your server-side upload handler:
 				var url = '<?php echo $data['site_url']; ?>/index.php/popup/upload_exec';
 				var btn = '';
 				$('#fileupload').fileupload({
@@ -211,27 +210,32 @@ class popup extends CI_Controller {
 						td[1] = $('<td width="40px"></td>').append(btupload);
 						tr.append(td);
 						$('#fbody').append(tr);
+						data['button'] = btupload;
 						
 						btupload.click(function(){
+							if(btupload.hasClass('disabled')) return;
 							$('.progress').addClass('active').removeClass('hide');
 							data.submit();
 						});
 					},
-					//formData: {'dom':'hahaha'},
 					done: function (e, data) {
-						//console.log('dnoe');
-						//console.log(data.jqXHR.responseText);
-						//$.each(data.result.files, function (index, file) {
-						//    $('<p/>').text(file.name).appendTo('#files');
-						//});
-						//$('#progress').addClass('hide');
+						$(data.button).removeClass('btn-info').addClass('disabled');
 						$('.progress .bar').css('');
 						$('.progress').removeClass('active');
+						var tabel = $('.datatable').dataTable();
+						var value = data.jqXHR.responseJSON.files[0];
+						var xploi = [];
+						xploi[0] = '';
+						if(value.thumbnail!='') xploi[0] = '<img src="<?php echo $data['site_url']; ?>/media/berkas/thumbnail/'+value.thumbnail+'" height="30px">'
+						xploi[1] = value.title;
+						xploi[2] = value.thumbnail;
+						xploi[3] = value.datetime;
+						xploi[4] = '0 kali';
+						xploi[5] = '';
+						tabel.fnAddData(xploi);
 					},
 					progress: function (e, data) {
-						//$('#progress').removeClass('hide');
 						var progress = parseInt(data.loaded / data.total * 100, 10);
-						//console.log(progress);
 						$('.progress .bar').css('width', progress + '%');
 					}
 				}).prop('disabled', !$.support.fileInput)
@@ -269,6 +273,8 @@ class popup extends CI_Controller {
 				$get_response->files[0]->key = $res['media_key'];
 				$get_response->files[0]->datetime = $res['media_datetime'];
 				$get_response->files[0]->thumbnail = $res['media_thumbnail'];
+				$get_response->files[0]->title = $res['media_title'];
+				$get_response->files[0]->viewed = $res['media_viewed'];
 			}
 			$response = json_encode($get_response); 
 		}
