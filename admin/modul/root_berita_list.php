@@ -14,7 +14,7 @@ $_app = $site_url.'/index.php/root/';
 			</div>
 			<br/>
 			<div id="informasi-berita">
-				<table class="table table-bordered" id="tslideshow">
+				<table class="table table-bordered table bootstrap-datatable datatable" id="tslideshow">
 					<thead>
 						<tr>                                   
 							<th>No</th>                                     

@@ -16,9 +16,9 @@ $_app = $site_url.'/index.php/root/';
 	<link href='<?php echo $root_path; ?>css/jquery.cleditor.css' rel='stylesheet'>
 	
 	<link href="<?php echo $root_path; ?>css/back-style.css" rel="stylesheet">
-	<link href="<?php echo $root_path; ?>css/kip.css" rel="stylesheet">
 	<link href="<?php echo $root_path; ?>css/jquery.fileupload-ui.css" rel="stylesheet" >
-	<link href='<?php echo $root_path; ?>css/style.css' rel="stylesheet">
+	<!--link href='<?php echo $root_path; ?>css/style.css' rel="stylesheet"-->
+	<link href="<?php echo $root_path; ?>css/kip.css" rel="stylesheet">
 	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
 	<!--[if lt IE 9]>
 	  <script src="<?php echo $root_path; ?>js/html5.js"></script>

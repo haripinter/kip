@@ -3,14 +3,6 @@
 include_once('root_local_function.php');
 $_app = $site_url.'/index.php/root/';
 ?>
-<style>
-	.dataTables_filter{
-		float: right;
-	}
-	.table thead{
-		background-color: #eee;
-	}
-</style>
 <div class="row-fluid sortable">
 	<div class="box span12">
 		<div class="box-header well" data-original-title>
