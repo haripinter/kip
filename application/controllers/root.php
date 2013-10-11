@@ -4,8 +4,19 @@ class root extends CI_Controller {
 	var $data = array();
 	public function index(){
 		$this->load->model('mod_setting');
+		$this->load->model('mod_skin');
+		$this->load->model('mod_permohonan');
+		$this->load->model('mod_pengaduan');
+		
+		$data = $this->kip->data();
+		
 		$data['site_url'] = $this->mod_setting->site_url();
 		$data['root_path'] = $data['site_url'].'/admin/';
+		$data['skin'] = $data['site_url'].'/skins/default/';
+		$data['stat_status_permohonan'] = $this->mod_permohonan->statistic();
+		$data['stat_bulanan_permohonan'] = $this->mod_permohonan->statistic('bulanan');
+		$data['stat_status_pengaduan'] = $this->mod_pengaduan->statistic();
+		$data['stat_bulanan_pengaduan'] = $this->mod_pengaduan->statistic('bulanan');
 		
 		$data['content'] = $this->load->view('admin/modul/root_home',$data,true);
 		$this->load->view('admin/admin',$data);
@@ -227,86 +238,23 @@ class root extends CI_Controller {
 		$data['root_path'] = $data['site_url'].'/admin/';
 		
 		$tmp = $data;
-		
-		if($mode=='upload'){
-		}else{
-			$tmp['download'] = $this->mod_download->get_all('download','date','DESC');
-			$data['content'] = $this->load->view('admin/modul/root_download',$tmp,true);
-		}
+		$tmp['download'] = $this->mod_download->get_all('download','date','DESC');
+		$data['content'] = $this->load->view('admin/modul/root_download',$tmp,true);
 		$this->load->view('admin/admin',$data);
 	}
 	
-	/*
-	function gambar($id_gambar=null,$mode=null){
-		$data['root_path'] = 'http://localhost/airputih/admin/';
-		if(!is_null($id_gambar)){
-			$id_gambar = intval($id_gambar);
-		}
+	
+	function galeri($id_gambar=null,$mode=null){
+		$this->load->model('mod_setting');
+		$this->load->model('mod_download');
 		
-		$this->load->model('mod_gambar');
+		$data = $this->kip->data();
+		$data['site_url'] = $this->mod_setting->site_url();
+		$data['root_path'] = $data['site_url'].'/admin/';
 		
-		$view_all = true;
-		
-		// POST action -> (insert | update) - delete
-		$tmp = null;
-		if($mode=='insert'){
-			if(isset($_POST['gambar']) && $_POST['gambar']=='Zimpan'){
-				
-				$post_id = (isset($_POST['post_id']))? $_POST['post_id'] : 0;
-				$judul = (isset($_POST['judul']))? $_POST['judul'] : ' ';
-				$isi = (isset($_POST['isi']))? $_POST['isi'] : ' ';
-				$start = (isset($_POST['start']))? $_POST['start'] : 'none';
-				$stop = (isset($_POST['stop']))? $_POST['stop'] : 'none';
-				$marquee = (isset($_POST['marquee']))? $_POST['marquee'] : 'none';
-				
-				$tmp = explode('/',$start);
-				if(count($tmp)==3){
-					if($start=='none' || !checkdate($tmp[1],$tmp[0],$tmp[2])){
-						$start = date('Y-m-d H:i:s');
-					}else{
-						$start = $this->kip->tgl_datetime($start);
-					}
-				}else{
-					$start = date('Y-m-d H:i:s');
-				}
-				
-				$tmp = explode('/',$stop);
-				if(count($tmp)==3){
-					if($stop=='none'){
-						$stop = '0000-00-00 00:00:00';
-					}else if(!checkdate($tmp[1],$tmp[0],$tmp[2])){
-						$start = $this->kip->tgl_datetime($stop);
-					}
-				}else{
-					$stop = '0000-00-00 00:00:00';
-				}
-				
-				$trash['post_id'] = $post_id;
-				$trash['judul'] = $judul;
-				$trash['isi'] = $isi;
-				$trash['start'] = $start;
-				$trash['stop'] = $stop;
-				$trash['marquee'] = $marquee;
-				$this->mod_berita->insert($trash);
-				
-			}else{
-				$view_all = false;
-			}
-		}else if($mode=='delete'){
-			$this->mod_gambar->delete($id_gambar);
-		}else{
-			$view_all = false;
-		}
-		if(!$view_all && (isset($id_gambar) && $id_gambar>=0)){
-			$tmp['gambar'] = $this->mod_gambar->get($id_gambar);
-			$data['content'] = $this->load->view('admin/modul/root_gambar_input',$tmp,true);
-		}else{
-			$tmp['gambar'] = $this->mod_gambar->get_all();
-			$data['content'] = $this->load->view('admin/modul/root_gambar_list',$tmp,true);
-		}
+		$tmp = $data;
+		$tmp['galeri'] = $this->mod_download->get_all('galeri','date','DESC');
+		$data['content'] = $this->load->view('admin/modul/root_galeri',$tmp,true);
 		$this->load->view('admin/admin',$data);
 	}
-	*/
-	
-	
 }

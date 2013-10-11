@@ -180,9 +180,6 @@ class popup extends CI_Controller {
 				<tbody id="fbody">
 				</tbody>
 			</table>
-			<!--div id="progress" class="progress">
-				<div class="progress-haha progress-striped progress-success active"><div class="bar" width="20%"></div>
-			</div-->
 			
 			<div class="progress progress-striped progress-success hide">
 				<div class="bar"></div>
@@ -199,6 +196,10 @@ class popup extends CI_Controller {
 					url: url,
 					dataType: 'json',
 					add: function (e, data) {
+						if($('.progress').hasClass('progress-danger')){
+							$('.progress').removeClass('progress-danger').addClass('progress-success');
+						}
+						
 						var piring = $('#fbody');
 						var index = (piring.children()).length;
 						var btupload = $('<input type="button" class="btn btn-info" value="upload" name="btupload">');
@@ -217,6 +218,7 @@ class popup extends CI_Controller {
 							data.submit();
 						});
 					},
+					formData:{section: 'download'},
 					done: function (e, data) {
 						$(data.button).removeClass('btn-info').addClass('disabled');
 						$(data.button).val('Sukses');
@@ -298,12 +300,35 @@ class popup extends CI_Controller {
 	}
 	
 	function upload_exec(){
+		if(!isset($_FILES['files']) || !isset($_POST['section'])){
+			echo 'error';
+			exit;
+		}
+		
+		$section = $_POST['section'];
+		
 		require('UploadHandler.php');
-		$upload_handler = new UploadHandler(array(
-			'upload_dir' => 'media/berkas/',
-			'upload_url' => 'media/berkas/',
-			'accept_file_types' => '/\.(gif|jpe?g|png|bmp|doc|docx|xls|xlsx|ppt|pptx|txt|rtf|odt|odp|odf|svg|csv|pps|pdf|zip|rar|tar|bz|gz|7z)$/i'
-		));
+		$upload_handler = null;
+		$option = array();
+		if($section=='download'){
+			$ext = array('gif','jpg','jpeg','bmp','png','doc','docx','xls','xlsx','ppt','pptx','rtf','txt','odt','odp','odf','svg','csv','pps','pdf','zip','rar','tar','bz','gz','7z');
+			$extension = pathinfo($_FILES['files']['name'][0], PATHINFO_EXTENSION);
+			if(!in_array(strtolower($extension), $ext)){
+				echo 'error';
+				exit;
+			}
+			
+			$option = array(
+				'upload_dir' => 'media/berkas/',
+				'upload_url' => 'media/berkas/',
+				'accept_file_types' => '/\.(gif|jpe?g|png|bmp|doc|docx|xls|xlsx|ppt|pptx|txt|rtf|odt|odp|odf|svg|csv|pps|pdf|zip|rar|tar|bz|gz|7z)$/i'
+			);
+		}else{
+			echo 'error';
+			exit();
+		}
+		
+		$upload_handler = new UploadHandler($option);
 		
 		$this->load->model('mod_download');
 		$id_user = 1;
@@ -373,7 +398,7 @@ class popup extends CI_Controller {
 		
 		$this->load->model('mod_download');
 		$media = $this->mod_download->get($media_id);
-		$folder = 'media/';
+		$folder = './media/';
 		if($media['media_key']=='download'){
 			$folder .= 'berkas/';
 		}

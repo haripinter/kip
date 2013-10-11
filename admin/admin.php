@@ -80,16 +80,16 @@ $_app = $site_url.'/index.php/root/';
 					<ul class="nav nav-tabs nav-stacked main-menu">
 						<li><a href="<?php echo $_app; ?>"><i class="icon-home"></i><span class="hidden-tablet"> Dashboard</span></a></li>
 						<li><a href="<?php echo $_app; ?>profil"><i class="icon-folder-open"></i><span class="hidden-tablet"> Profil</span></a></li>
-						<li><a href="<?php echo $_app; ?>permohonan"><i class="icon-picture"></i><span class="hidden-tablet"> Permohonan IP</span></a></li>
+						<li><a href="<?php echo $_app; ?>permohonan"><i class="icon-picture"></i><span class="hidden-tablet"> Permohonan Informasi</span></a></li>
 						<li><a href="<?php echo $_app; ?>pengaduan"><i class="icon-picture"></i><span class="hidden-tablet"> Pengaduan</span></a></li>
 						<!--li><a href="<?php echo $_app; ?>"><i class="icon-random"></i><span class="hidden-tablet"> Pesan</span></a></li-->
 						
 						<li class="nav-header hidden-tablet">Menu Website</li>
-						<li><a href="<?php echo $_app; ?>informasi"><i class="icon-picture"></i><span class="hidden-tablet"> Informasi Statis</span></a></li>
-						<li><a href="<?php echo $_app; ?>berita"><i class="icon-picture"></i><span class="hidden-tablet"> Berita</span></a></li>
+						<li><a href="<?php echo $_app; ?>informasi"><i class="icon-picture"></i><span class="hidden-tablet"> Halaman Statis</span></a></li>
+						<li><a href="<?php echo $_app; ?>berita"><i class="icon-picture"></i><span class="hidden-tablet"> Berita / Informasi</span></a></li>
 						<!--li><a href="<?php echo $_app; ?>komentar"><i class="icon-random"></i><span class="hidden-tablet"> Komentar</span></a></li-->
-						<!--li><a href="<?php echo $_app; ?>gambar"><i class="icon-list-alt"></i><span class="hidden-tablet"> Galeri Foto</span></a></li>
-						<li><a href="<?php echo $_app; ?>"><i class="icon-bullhorn"></i><span class="hidden-tablet"> Galeri Video</span></a></li-->
+						<li><a href="<?php echo $_app; ?>gambar"><i class="icon-list-alt"></i><span class="hidden-tablet"> Galeri</span></a></li>
+						<!--li><a href="<?php echo $_app; ?>"><i class="icon-bullhorn"></i><span class="hidden-tablet"> Galeri Video</span></a></li-->
 						<li><a href="<?php echo $_app; ?>download"><i class="icon-bullhorn"></i><span class="hidden-tablet"> Dokumen Publik</span></a></li>
 						
 						<li class="nav-header hidden-tablet">Pengaturan Aplikasi</li>
@@ -98,6 +98,7 @@ $_app = $site_url.'/index.php/root/';
 						<li><a href="<?php echo $_app; ?>"><i class="icon-lock"></i><span class="hidden-tablet"> Tampilan</span></a></li>
 						<li><a href="<?php echo $_app; ?>"><i class="icon-lock"></i><span class="hidden-tablet"> Pengaturan Diskusi</span></a></li>
 						<li><a href="<?php echo $_app; ?>"><i class="icon-lock"></i><span class="hidden-tablet"> Jajak Pendapat</span></a></li>
+						<li><a href="<?php echo $_app; ?>"><i class="icon-lock"></i><span class="hidden-tablet"> Menu</span></a></li>
 					</ul>
 				</div><!--/.well -->
 			</div><!--/span-->

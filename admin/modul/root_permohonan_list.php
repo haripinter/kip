@@ -218,9 +218,6 @@ $(function () {
 			<h2><i class="icon-picture"></i> STATUS SK</h2>
 		</div>
 		<div class="box-berita" style="padding:10px">
-			<?php
-				
-			?>
 			<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
 		</div>
 	</div>
