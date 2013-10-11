@@ -6,7 +6,7 @@ class mod_download extends CI_Model{
 		$res = array();
 		if(is_numeric($id_media)){
 			$sql = "SELECT * FROM dinamic_media WHERE media_id=".$id_media;
-			$res = $this->mysql->get_data($sql);
+			$res = $this->mysql->get_data($sql,'clean');
 		}
 		return $res;
 	}
@@ -35,7 +35,7 @@ class mod_download extends CI_Model{
 		if(is_numeric($limit) && $limit>0){
 			$sql .= 'LIMIT '.$limit;
 		}
-		$res = $this->mysql->get_datas($sql);
+		$res = $this->mysql->get_datas($sql,'clean');
 		return $res;
 	}
 	
@@ -56,6 +56,16 @@ class mod_download extends CI_Model{
 	// Delete berita
 	function delete($key,$id_media){
 		$this->mysql->query("DELETE FROM dinamic_media WHERE media_key='".$key."' AND media_id=".$id_media);
+	}
+	
+	function change_title($media){
+		$this->mysql->query("UPDATE dinamic_media SET media_title='".$media['media_title']."' WHERE media_id=".$media['media_id']);
+		return $this->get($media['media_id']);
+	}
+	
+	function viewed($id_media){
+		$this->mysql->query("UPDATE dinamic_media SET media_viewed=IFNULL(media_viewed,0)+1 WHERE media_id=".$id_media);
+		return $this->get($id_media);
 	}
 }
 ?>
