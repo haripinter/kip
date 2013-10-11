@@ -44,13 +44,26 @@ class mod_polling extends CI_Model{
 	
 	// Input polling
 	function insert($polling){
+		$parent = $polling['parent'];
+		$children = $polling['children'];
 		$res = array();
-		if($polling['media_id']>0){
+		if($parent['polling_id']>0){
 			$this->mysql->query("UPDATE dinamic_media SET media_title='".$media['title']."' WHERE media_key='".$media['key']."' AND media_id=".$media['media_id']);
 			$res = $this->get($media['media_id']);
+			
+			$this->mysql->query("UPDATE dinamic_pollings SET polling_name='".$parent['title']."')");
+			foreach($children as $ch){
+				$maxid = $this->mysql->get_maxid('polling_id','dinamic_pollings');
+				$this->mysql->query("INSERT INTO dinamic_pollings(polling_id,polling_key,polling_name) VALUES(".$maxid.",'".$parent_id."','".$children['title']."')");
+			}
+			$res = $this->get($maxid);
 		}else{
-			$maxid = $this->mysql->get_maxid('polling_id','dinamic_pollings');
-			$this->mysql->query("INSERT INTO dinamic_pollings(polling_id,polling_key,polling_name,polling_value,polling_status) VALUES()");
+			$parent_id = $this->mysql->get_maxid('polling_id','dinamic_pollings');
+			$this->mysql->query("INSERT INTO dinamic_pollings(polling_id,polling_key,polling_name) VALUES(".$parent_id.",'parent','".$parent['title']."')");
+			foreach($children as $ch){
+				$maxid = $this->mysql->get_maxid('polling_id','dinamic_pollings');
+				$this->mysql->query("INSERT INTO dinamic_pollings(polling_id,polling_key,polling_name) VALUES(".$maxid.",'".$parent_id."','".$children['title']."')");
+			}
 			$res = $this->get($maxid);
 		}
 		return $res;
