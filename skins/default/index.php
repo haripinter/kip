@@ -510,9 +510,9 @@ $(function () {
 			<div class="row-fluid">
 			</div>
 			<div class="row-fluid">
-				<div class="span4  box"><div id="chart_bulanan_permohonan" style="min-width: 400px; height: 400px; margin: 0 auto"></div></div>
-				<div class="span4 box"><div id="chart_status_permohonan" style="min-width: 400px; height: 400px; margin: 0 auto"></div></div>
-				<div class="span4 box"><div id="chart_status_pengaduan" style="min-width: 400px; height: 400px; margin: 0 auto"></div></div>
+				<div class="span4  box"><div id="chart_bulanan_permohonan" style="margin: 0 auto"></div></div>
+				<div class="span4 box"><div id="chart_status_permohonan" style="margin: 0 auto"></div></div>
+				<div class="span4 box"><div id="chart_status_pengaduan" style="margin: 0 auto"></div></div>
 			</div>
 		</div>
 		<?php

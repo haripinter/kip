@@ -36,7 +36,6 @@ $_app = $site_url.'/index.php/root/';
 					$n = 1;
 					foreach($galeri as $d){
 						$preview = '';
-						$foldr = 'media/galeri/';
 						if(isset($d['media_thumbnail']) && file_exists($d['media_thumbnail'])){
 							$preview = '<img src="'.$site_url.'/'.$d['media_thumbnail'].'" height="30px">';
 						}
@@ -69,7 +68,7 @@ $_app = $site_url.'/index.php/root/';
 <script>
 	$('.bt-tambah').click(function(){
 		$('.download-body').html('Wait...');
-		var url = '<?php echo $site_url; ?>/index.php/popup/upload_ui';
+		var url = '<?php echo $site_url; ?>/index.php/popup/galeri_ui';
 		var get = $.get(url);
 		get.done(function(data){
 			$('.download-body').html(data);

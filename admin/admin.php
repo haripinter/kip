@@ -88,16 +88,16 @@ $_app = $site_url.'/index.php/root/';
 						<li><a href="<?php echo $_app; ?>informasi"><i class="icon-picture"></i><span class="hidden-tablet"> Halaman Statis</span></a></li>
 						<li><a href="<?php echo $_app; ?>berita"><i class="icon-picture"></i><span class="hidden-tablet"> Berita / Informasi</span></a></li>
 						<!--li><a href="<?php echo $_app; ?>komentar"><i class="icon-random"></i><span class="hidden-tablet"> Komentar</span></a></li-->
-						<li><a href="<?php echo $_app; ?>gambar"><i class="icon-list-alt"></i><span class="hidden-tablet"> Galeri</span></a></li>
+						<li><a href="<?php echo $_app; ?>galeri"><i class="icon-list-alt"></i><span class="hidden-tablet"> Galeri</span></a></li>
 						<!--li><a href="<?php echo $_app; ?>"><i class="icon-bullhorn"></i><span class="hidden-tablet"> Galeri Video</span></a></li-->
 						<li><a href="<?php echo $_app; ?>download"><i class="icon-bullhorn"></i><span class="hidden-tablet"> Dokumen Publik</span></a></li>
+						<li><a href="<?php echo $_app; ?>polling"><i class="icon-lock"></i><span class="hidden-tablet"> Jajak Pendapat</span></a></li>
 						
 						<li class="nav-header hidden-tablet">Pengaturan Aplikasi</li>
 						<li><a href="<?php echo $_app; ?>"><i class="icon-th-list"></i><span class="hidden-tablet"> Pengguna</span></a></li>
 						<li><a href="<?php echo $_app; ?>"><i class="icon-lock"></i><span class="hidden-tablet"> Modul Aplikasi</span></a></li>
 						<li><a href="<?php echo $_app; ?>"><i class="icon-lock"></i><span class="hidden-tablet"> Tampilan</span></a></li>
-						<li><a href="<?php echo $_app; ?>"><i class="icon-lock"></i><span class="hidden-tablet"> Pengaturan Diskusi</span></a></li>
-						<li><a href="<?php echo $_app; ?>"><i class="icon-lock"></i><span class="hidden-tablet"> Jajak Pendapat</span></a></li>
+						<!--li><a href="<?php echo $_app; ?>"><i class="icon-lock"></i><span class="hidden-tablet"> Pengaturan Diskusi</span></a></li-->
 						<li><a href="<?php echo $_app; ?>"><i class="icon-lock"></i><span class="hidden-tablet"> Menu</span></a></li>
 					</ul>
 				</div><!--/.well -->

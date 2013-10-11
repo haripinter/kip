@@ -257,4 +257,13 @@ class root extends CI_Controller {
 		$data['content'] = $this->load->view('admin/modul/root_galeri',$tmp,true);
 		$this->load->view('admin/admin',$data);
 	}
+	
+	function polling(){
+		$this->load->model('mod_setting');
+		$this->load->model('mod_polling');
+		
+		$data = $this->kip->data();
+		$data['site_url'] = $this->mod_setting->site_url();
+		$data['root_path'] = $data['site_url'].'/admin/';
+	}
 }

@@ -323,6 +323,19 @@ class popup extends CI_Controller {
 				'upload_url' => 'media/berkas/',
 				'accept_file_types' => '/\.(gif|jpe?g|png|bmp|doc|docx|xls|xlsx|ppt|pptx|txt|rtf|odt|odp|odf|svg|csv|pps|pdf|zip|rar|tar|bz|gz|7z)$/i'
 			);
+		}else if($section=='galeri'){
+			$ext = array('gif','jpg','jpeg','bmp','png');
+			$extension = pathinfo($_FILES['files']['name'][0], PATHINFO_EXTENSION);
+			if(!in_array(strtolower($extension), $ext)){
+				echo 'error';
+				exit;
+			}
+			
+			$option = array(
+				'upload_dir' => 'media/galeri/',
+				'upload_url' => 'media/galeri/',
+				'accept_file_types' => '/\.(gif|jpe?g|png|bmp)$/i'
+			);
 		}else{
 			echo 'error';
 			exit();
@@ -337,7 +350,7 @@ class popup extends CI_Controller {
 		$get_response = json_decode($response);
 		$file = get_object_vars($get_response->files[0]);
 		if($file['size']>0){
-			$tmp['key'] = 'download';
+			$tmp['key'] = $section;
 			$tmp['link'] = '';
 			$tmp['title'] = '';
 			$tmp['realname'] = $file['name'];
@@ -369,14 +382,16 @@ class popup extends CI_Controller {
 			$folder = 'media/';
 			if($data['media_key']=='download'){
 				$folder .= 'berkas/';
+			}else if($data['media_key']=='galeri'){
+				$folder .= 'galeri/';
 			}
 			
 			if($data['media_realname']!='' && file_exists($folder.$data['media_realname'])){
 				unlink($folder.$data['media_realname']);
 			}
 			
-			if($data['media_thumbnail']!='' && file_exists($folder.'thumbnail/'.$data['media_thumbnail'])){
-				unlink($folder.'thumbnail/'.$data['media_thumbnail']);
+			if($data['media_thumbnail']!='' && file_exists($data['media_thumbnail'])){
+				unlink($data['media_thumbnail']);
 			}
 			
 			$this->mod_download->delete($data['media_key'],$data['media_id']);
@@ -401,6 +416,8 @@ class popup extends CI_Controller {
 		$folder = './media/';
 		if($media['media_key']=='download'){
 			$folder .= 'berkas/';
+		}else if($media['media_key']=='galeri'){
+			$folder .= 'galeri/';
 		}
 		
 		$file = $folder.$media['media_realname'];
@@ -421,6 +438,139 @@ class popup extends CI_Controller {
 			readfile($file);
 			exit;
 		}
+	}
+	
+	function galeri_ui(){
+		$this->load->model('mod_setting');
+		$data['site_url'] = $this->mod_setting->site_url();
+		?>
+		<div class="container span12">
+			<span class="btn btn-success fileinput-button">
+				<i class="glyphicon glyphicon-plus"></i>
+				<span>Select files...</span>
+				<input id="fileupload" type="file" name="files[]" multiple>
+			</span>
+			<table class="table" style="margin-top:10px; width:100%;">
+				<tbody id="fbody">
+				</tbody>
+			</table>
+			
+			<div class="progress progress-striped progress-success hide">
+				<div class="bar"></div>
+			</div>
+		</div>
+		<script>
+			/*jslint unparam: true */
+			/*global window, $ */
+			$(function () {
+				'use strict';
+				var url = '<?php echo $data['site_url']; ?>/index.php/popup/upload_exec';
+				var btn = '';
+				$('#fileupload').fileupload({
+					url: url,
+					dataType: 'json',
+					add: function (e, data) {
+						if($('.progress').hasClass('progress-danger')){
+							$('.progress').removeClass('progress-danger').addClass('progress-success');
+						}
+						
+						var piring = $('#fbody');
+						var index = (piring.children()).length;
+						var btupload = $('<input type="button" class="btn btn-info" value="upload" name="btupload">');
+						var filename = $('<span name="filename">'+data.files[0].name+'</span>');
+						var tr = $('<tr></tr>');
+						var td = [];
+						td[0] = $('<td></td>').append(filename);
+						td[1] = $('<td width="40px"></td>').append(btupload);
+						tr.append(td);
+						$('#fbody').append(tr);
+						data['button'] = btupload;
+						
+						btupload.click(function(){
+							if(btupload.hasClass('disabled')) return;
+							$('.progress').addClass('active').removeClass('hide');
+							data.submit();
+						});
+					},
+					formData:{section: 'galeri'},
+					done: function (e, data) {
+						$(data.button).removeClass('btn-info').addClass('disabled');
+						$(data.button).val('Sukses');
+						$('.progress .bar').css('');
+						$('.progress').removeClass('active');
+						var tabel = $('.datatable').dataTable();
+						var value = data.jqXHR.responseJSON.files[0];
+						var xploi = [];
+						xploi[0] = '';
+						if(value.thumbnail!='') xploi[0] = '<img src="<?php echo $data['site_url']; ?>/'+value.thumbnail+'" height="30px">'
+						xploi[1] = value.title;
+						//xploi[2] = value.realname;
+						xploi[2] = value.datetime;
+						xploi[3] = '0 kali';
+						
+						
+						var txEdit = '<a class="btn btn-info bt-edit-pop" mode="edit" name="'+value.media_id+'" title="Edit"><i class="icon-edit icon-white"></i></a>';
+						var txView = ' <a class="btn btn-info bt-view-pop" name="'+value.realname+'" title="View"><i class="icon-search icon-white"></i></a>';
+						var txRemove = ' <a class="btn btn-danger bt-remove-pop" name="'+value.media_id+'" title="Delete"><i class="icon-trash icon-white"></i></a>';
+						xploi[4] = txEdit + txView + txRemove;
+						
+						var last = tabel.fnAddData(xploi);
+						var nod = tabel.fnGetNodes(last[0]);
+						
+						var edit = $(nod).find('a.bt-edit-pop');
+						var view = $(nod).find('a.bt-view-pop');
+						var remove = $(nod).find('a.bt-remove-pop');
+						
+						remove.click(function(){
+							var btn = $(this);
+							var media_id = this.name;
+							bootbox.confirm("Anda yakin akan menghapus konten ini?", function(result) {
+								if(result==true){
+									var url  = '<?php echo $data['site_url']; ?>/index.php/popup/media_del';
+									var post = $.post(url,{media: media_id});
+									post.done(function(data){
+										if(data=='OK'){
+											var tr = (btn.parent().parent())[0];
+											var tabel = $('.datatable').dataTable();
+											tabel.fnDeleteRow(tabel.fnGetPosition(tr));
+										}
+									});
+								}
+							});
+						});
+						
+						edit.click(function(){
+							var media_id = this.name;
+							var btn = $(this);
+							var ico = btn.html();
+							var title = $(btn.parent().parent().children()[1]);
+							if(btn.attr('mode')=='edit'){
+								title.html('<input type="text" name="media_title" value="'+title.html()+'" class="span12">');
+								btn.attr('mode','save');
+								btn.removeClass('btn-info').addClass('btn-success');
+								btn.children().removeClass('icon-edit').addClass('icon-hdd');
+							}else{
+								var url  = '<?php echo $data['site_url']; ?>/index.php/popup/media_title';
+								var post = $.post(url,{media: media_id, title: title.children().val()});
+								post.done(function(data){
+									title.html(data);
+									btn.attr('mode','edit');
+									btn.removeClass('btn-success').addClass('btn-info');
+									btn.children().removeClass('icon-hdd').addClass('icon-edit');
+								});
+							}
+						});
+						
+					},
+					progress: function (e, data) {
+						var progress = parseInt(data.loaded / data.total * 100, 10);
+						$('.progress .bar').css('width', progress + '%');
+					}
+				}).prop('disabled', !$.support.fileInput)
+					.parent().addClass($.support.fileInput ? undefined : 'disabled');
+			});
+			</script>
+		<?php
 	}
 }
 ?>
