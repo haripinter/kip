@@ -1,6 +1,7 @@
 <?php
 class kip{
 	var $ci;
+	
 	function __construct(){
 		$this->ci = &get_instance();
 	}
@@ -64,10 +65,23 @@ class kip{
 		}
 	}
 	
+	function filtext($str){
+		return addslashes(str_replace("'",'&#39;',htmlspecialchars($str)));
+	}
+	
 	function randkey($length=11) {
 		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		$key = substr( str_shuffle( $chars ), 0, $length );
 		return $key;
 	}
+	
+	/*
+	$opt = array(
+		site => 'alamat site',
+		rel => 'but nge-link ke submenu'
+		level => 'level menu'
+		);
+	 */
+	
 }
 ?>

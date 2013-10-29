@@ -48,15 +48,12 @@ class mysql{
 	
 	function get_column($result){
 		$tmp = array();
-		//foreach($result as $e){
-			$ee = array_keys($result);
-			foreach($ee as $f){
-				if(!is_numeric($f)){
-					$tmp[] = $f;
-				}
+		$ee = array_keys($result);
+		foreach($ee as $f){
+			if(!is_numeric($f)){
+				$tmp[] = $f;
 			}
-			//break;
-		//}
+		}
 		return $tmp;
 	}
 }

@@ -1,11 +1,10 @@
-#<IfModule mod_rewrite.c>
-#	RewriteEngine on
-#	
-#	RewriteRule ^(.*)$ index.php [L]
-#	RewriteRule ^aaaaaaa$ index.php [L]
-#	RewriteCond $1 !^(index.php)
-#	RewriteRule ^(.*)$ index.php/$1 [L]
-#	
-#	Options All -Indexes
-#</IfModule>
-#
+<IfModule mod_rewrite.c>
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+ 
+    RewriteEngine on
+    RewriteRule ^(.*)$ index.php/$1 [L]
+	
+	RewriteRule admin-(.*)/(.*) skins/admin/$1/$2 [L]
+	RewriteRule home-(.*)/(.*) skins/frontpage/$1/$2 [L]
+</IfModule>

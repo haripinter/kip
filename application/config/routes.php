@@ -38,8 +38,12 @@
 |
 */
 
-$route['default_controller'] = "welcome";
+$route['default_controller'] = "Frontsite";
 $route['404_override'] = '';
+
+$route['admin'] = "Admin";
+$route['(:any).html'] = "Frontsite/$1";
+$route['shot-(:any)'] = "mod_$1";
 
 
 /* End of file routes.php */
