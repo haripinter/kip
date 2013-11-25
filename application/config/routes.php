@@ -42,8 +42,22 @@ $route['default_controller'] = "Frontsite";
 $route['404_override'] = '';
 
 $route['admin'] = "Admin";
-$route['(:any).html'] = "Frontsite/$1";
 $route['shot-(:any)'] = "mod_$1";
+
+$route['home.html'] = "Frontsite";
+
+$route['registrasi'] = "Frontsite/registrasi";
+$route['aktivasi'] = "Frontsite/aktivasi";
+$route['aktivasi/baru'] = "Frontsite/aktivasi/baru";
+$route['download'] = "Frontsite/download";
+$route['permohonan'] = "Frontsite/permohonan";
+$route['permohonan/(:any)'] = "Frontsite/permohonan/$1";
+$route['pengaduan'] = "Frontsite/pengaduan";
+$route['pengaduan/(:any)'] = "Frontsite/pengaduan/$1";
+
+$route['berita/(:any)/(:any).html'] = "Frontsite/berita/$1/$2";
+$route['page/(:any)'] = "Frontsite/halaman/$1";
+$route['(:any).html'] = "Frontsite/$1";
 
 
 /* End of file routes.php */

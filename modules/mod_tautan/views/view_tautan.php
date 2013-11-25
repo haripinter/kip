@@ -24,19 +24,6 @@ $popup_action = site_url().'shot-tautan';
 			<h2><i class="icon-picture"></i> TAUTAN</h2>
 		</div>
 		<div class="box-berita" style="padding:10px">
-			<div id="modalwin" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<header class="modal-header">
-					<a href="#" class="close" data-dismiss="modal">x</a>
-					<h4>TAMBAH TAUTAN</h4>
-				</header>
-				<div class="modal-body download-body">
-					Tunggu...
-				</div>
-			</div>
-			<div>
-				<a class="btn bt-tambah"  href='#modalwin' data-toggle='modal'>TAMBAH</a>
-			</div>
-			<br/>
 			<table class="table bootstrap-datatable datatable">
 				<thead>
 					<th width="1px">No.</th>
@@ -110,7 +97,7 @@ $(document).ready(function(){
 			pop.find('h4').html('Edit Tautan');
 			var urls = '<?php echo $popup_action; ?>';
 			//var tipe = box.parent().attr('id');
-			var data = {action:'view',id:this.name};
+			var data = {action:'edit',id:this.name};
 			
 			var post = $.post(urls,data);
 			post.done(function(data){
@@ -137,9 +124,11 @@ $(document).ready(function(){
 				if(result==true){
 					var post = $.post(urls,data);
 					post.done(function(data){
-						if(data=='ok'){
+						data = $.parseJSON(data);
+						if(data['status']=='success'){
 							tbl = tbl.dataTable();
 							tbl.fnDeleteRow(tbl.fnGetPosition(tr[0]));
+							sort_tabel(tbl);
 						}
 					});
 				}
@@ -164,8 +153,10 @@ $(document).ready(function(){
 					</header>\
 					<div class="modal-body"></div>\
 					<footer class="modal-footer">\
-						<span class="pull-left modal-result"></span>\
-						<a class="btn modal-tutup">Cancel</a>\
+						<span class="pull-left">\
+							<span class="modal-result"></span>\
+						</span>\
+						<a class="btn modal-tutup">Tutup</a>\
 						<a class="btn btn-success bt-zimpan">Simpan</a>\
 					</footer>\
 				  </div>';
@@ -179,6 +170,21 @@ $(document).ready(function(){
 		pop.modal('hide');
 	});
 	
+	/*
+	$(".modalzWindow .bt-modal-baru").click(function(){
+		var btn = $(this);
+		var box = btn.parents('.bawah-datatabel').parent();
+		var inp = box.find('input');
+		box.find('input[name="tautan_id"]').val(0);
+		box.find('input[name="title"]').val('');
+		box.find('input[name="link"]').val('');
+		box.find('select[name="tautan_option"]').val(0);
+		box.find('input[name="mediaid"]').val('');
+		box.find('span[name="txt_filename"]').html('');
+		box.find('select[name="status"]').val('on');
+		box.find('file[name="files[]"]').MultiFile('reset');
+	});*/
+	
 	$('.bt-datatable-add .bt-add-data').click(function(){
 		var btn = $(this);
 		var box = btn.parents('.bawah-datatabel').parent();
@@ -189,10 +195,9 @@ $(document).ready(function(){
 		
 		// edit this
 		mug.html('Tunggu...');
-		pop.find('h4').html('Tambah Menu');
+		pop.find('h4').html('Tambah Tautan');
 		var urls = '<?php echo $popup_action; ?>';
-		var tipe = box.parent().attr('id');
-		var data = {action:'view',type:tipe,menu:this.name};
+		var data = {action:'edit',id:this.name};
 		
 		var post = $.post(urls,data);
 		post.done(function(data){
@@ -257,8 +262,17 @@ $(document).ready(function(){
 				
 				res.html('<font color="green">Tersimpan.</font>');
 			}else if(data['status']=='update'){	
-				var tr = tbl.find('.rowstbl'+data['tautan_id']).parent().parent();
+				// change this
+				var fi = '.rowstbl'+data['tautan_id'];
+				
+				var tr  = '';
+				var tx = tbl.fnGetNodes();
+				$(tx).each(function(){
+					var dm = $(this).find(fi);
+					if(dm.length>0) tr = dm.parent().parent();
+				});
 				var trpos = tbl.fnGetPosition(tr[0]);
+					
 				tbl.fnUpdate(data['tautan_title'],trpos,1);
 				tbl.fnUpdate(preview,trpos,2);
 				tbl.fnUpdate(data['tautan_link'],trpos,3);
@@ -341,8 +355,17 @@ $(document).ready(function(){
 					
 					res.html('<font color="green">Tersimpan.</font>');
 				}else if(dota.status=='update'){	
-					var tr = tbl.find('.rowstbl'+dota.tautan_id).parent().parent();
+					// change this
+					var fi = '.rowstbl'+dota.tautan_id;
+					
+					var tr  = '';
+					var tx = tbl.fnGetNodes();
+					$(tx).each(function(){
+						var dm = $(this).find(fi);
+						if(dm.length>0) tr = dm.parent().parent();
+					});
 					var trpos = tbl.fnGetPosition(tr[0]);
+					
 					tbl.fnUpdate(dota.tautan_title,trpos,1);
 					tbl.fnUpdate(preview,trpos,2);
 					tbl.fnUpdate(dota.tautan_link,trpos,3);
@@ -359,6 +382,32 @@ $(document).ready(function(){
 			}
 		}).prop('disabled', !$.support.fileInput)
 			.parent().addClass($.support.fileInput ? undefined : 'disabled');
+	}
+	
+	function sort_tabel(tbl){
+		var trs = tbl.fnGetNodes();
+		var num = 1;
+		$(trs).each(function(){
+			var tds = $(this).find('td');
+			var spa = $(tds[0]).children('span');
+			var cen = $(tds[0]).children('center');
+			cen.html(num);
+			
+			var isi = $('<div>').append(cen).append(spa);
+			tbl.fnUpdate(isi.html(),tbl.fnGetPosition(this),0);
+			isi.remove();
+			num++;
+		});
+	}
+	
+	function sort_tabel_biasa(tbody){
+		var trs = $(tbody).children('tr');
+		var nnn = 1;
+		$(trs).each(function(){
+			var tds = $(this).children('td');
+			$(tds[0]).children('center').html(nnn);
+			nnn++;
+		});
 	}
 });
 </script>

@@ -1,11 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-$post_id = (isset($berita['post_id']))? $berita['post_id'] : 0;
-$post_title = (isset($berita['post_title']))? $berita['post_title'] : '';
-$post_content = (isset($berita['post_content']))? $berita['post_content'] : '';
-$post_created = (isset($berita['post_created']))? $berita['post_created'] : '';
-$post_expired = (isset($berita['post_expired']))? $berita['post_expired'] : '';
+$id = intval(@$berita['post_id']);
+$title = @$berita['post_title'];
+$content = to_content(@$berita['post_content']);
+$start = datetime_tgl(@$berita['post_start']);
+$stop = datetime_tgl(@$berita['post_stop']);
+$marquee = @$berita['post_marquee'];
 
+$action = site_url().'shot-berita';
 ?>
 <div class="row-fluid sortable">
 	<div class="box span12">
@@ -13,18 +15,23 @@ $post_expired = (isset($berita['post_expired']))? $berita['post_expired'] : '';
 			<h2><i class="icon-picture"></i> BERITA / INFORMASI</h2>
 		</div>
 		<div class="box-berita" style="padding:10px">
-			<form class="form-horizontal" method="post" action="<?php echo $site_url; ?>/index.php/root/berita/1/insert">
+			<form id="frm_berita">
 				<div class="span9" style="margin-bottom:50px">
-					<input type="hidden" name="post_id" value="<?php echo intval($post_id); ?>">
+					<input type="hidden" name="action" value="save">
+					<input type="hidden" name="id" value="<?php echo intval($id); ?>">
 					<div style="margin-bottom:10px;">
-						<input type="text" class="span12" name="judul" value="<?php echo $post_title; ?>" placeholder="Judul Berita"/>
+						<input type="text" class="span12" name="title" value="<?php echo $title; ?>" placeholder="Judul Berita"/>
 					</div>
 					<div class="control-group">
-							<textarea class="cleditor" name="isi"><?php echo $post_content; ?></textarea>
+							<textarea class="cleditor" name="content"><?php echo $content; ?></textarea>
+					</div>
+					<div class="pull-left">
+						<input type="button" class="btn bt-back"  value="Kembali"/>
+						<span class="result"></span>
 					</div>
 					<div class="pull-right">
-						<button type="reset" class="btn btn">Batal</button>
-						<button type="submit" class="btn btn-success" name="berita" value="Zimpan">Simpan</button>
+						<input type="button" class="btn bt-new"  value="Baru"/>
+						<input type="button" class="btn btn-success bt-simpan" value="Simpan"/>
 					</div>
 				</div>
 				<div class="span3">
@@ -35,23 +42,20 @@ $post_expired = (isset($berita['post_expired']))? $berita['post_expired'] : '';
 						<div class="box-content" style="padding:10px">
 							<table>
 								<tr>
-									<td>Tanggal Terbit</td>
-									<td>:</td>
-									<td><input type="text" class="tanggalan" name="start" value="<?php echo datetime_tgl($post_created); ?>" style="width:100px"></td>
+									<td colspan="2"><b>Masa Aktif Berita :</b></td>
 								</tr>
 								<tr>
-									<td>Kadaluarsa</td>
-									<td>:</td>
-									<td><input type="text" class="tanggalan" name="stop" value="<?php echo datetime_tgl($post_expired); ?>" style="width:100px"></td>
+									<td colspan="2">
+										<input type="text" class="tanggalan" name="start" value="<?php echo $start; ?>" style="width:90px"> - 
+										<input type="text" class="tanggalan" name="stop" value="<?php echo $stop; ?>" style="width:90px">
+										<br/>
+										<br/>
+									</td>
 								</tr>
 								<tr>
-									<td>Teks Berjalan*</td>
-									<td>:</td>
-									<td><input type="checkbox" name="marquee"></td>
+									<td><input type="checkbox" name="marquee" style="vertical-align: bottom;"> <span style="margin-bottom:0px"><b>Jadikan Teks Berjalan* :</b></span></td>
 								</tr>
 								<tr>
-									<td>Kategori</td>
-									<td>:</td>
 									<td></td>
 								</tr>
 							</table>
@@ -69,10 +73,55 @@ $post_expired = (isset($berita['post_expired']))? $berita['post_expired'] : '';
 </div>
 
 <script>
-$( ".tanggalan" ).datepicker({
-	changeMonth: true,
-	changeYear: true,
-	/*yearRange: "-100:+0",*/
-	dateFormat:"dd/mm/yy"
+$(document).ready(function(){
+	$( ".tanggalan" ).datepicker({
+		changeMonth: true,
+		changeYear: true,
+		/*yearRange: "-100:+0",*/
+		dateFormat:"dd/mm/yy"
+	});
+	
+	$('.bt-simpan').click(function(){
+		var res = $('#frm_berita').find('span.result');
+		res.html('Sedang menyimpan...');
+		
+		var frm = $('#frm_berita');
+		var data = frm.serializeArray();
+		var urls = '<?php echo $action; ?>';
+		var post = $.post(urls,data);
+		post.done(function(data){
+			data = $.parseJSON(data);
+			if(data['status']=='insert'){
+				res.html('<font color="green">Data Tersimpan.</font>');
+			}else if(data['status']=='update'){
+				res.html('<font color="green">Data Terupdate.</font>');
+			}else{
+			}
+		});
+	});
+	
+	$('.bt-back').click(function(){
+		window.location='<?php echo site_url(); ?>admin/berita';
+	});
+	
+	$('.bt-new').click(function(){
+		var frm = $('#frm_berita');
+		var tid = frm.find('input[name="id"]');
+		var ttl = frm.find('input[name="title"]');
+		var cnt = frm.find('textarea[name="content"]');
+		var sta = frm.find('input[name="start"]');
+		var sto = frm.find('input[name="stop"]');
+		var mrq = frm.find('input[name="marquee"]');
+		
+		tid.val(0);
+		ttl.val('');
+		cnt.val('');
+		sta.val('');
+		sto.val('');
+		mrq.removeAttr('checked');
+		
+		var con = cnt.cleditor()[0];
+		con.updateFrame();
+	});
 });
 </script>

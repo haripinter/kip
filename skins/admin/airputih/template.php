@@ -5,7 +5,7 @@ $theme = config_item('admin_theme');
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>KIP v1.0 ~ Backend</title>
+	<title>KIP v0.1</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="E-Cermat Admin">
 	<meta name="author" content="haripinter">
@@ -45,7 +45,7 @@ $theme = config_item('admin_theme');
 		<div class="navbar-inner">
 			<div class="container-fluid">
 				<div class="top-nav">
-					<a class="brand" href="#">KIP v1.0</a>
+					<a class="brand" href="#">KIP v0.1</a>
 				</div><!--/.nav-collapse -->
 				
 				<a class="btn btn-navbar" data-toggle="collapse" data-target=".top-nav.nav-collapse,.sidebar-nav.nav-collapse">

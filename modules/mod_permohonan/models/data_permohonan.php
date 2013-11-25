@@ -3,9 +3,14 @@
 class data_permohonan extends CI_Model{
 
 	function get($id_request){
-		$data = array();
-		$sql = "SELECT * FROM dinamic_users,dinamic_requests WHERE request_userid=user_id AND request_id=".intval($id_request);
+		$sql = "SELECT * FROM dinamic_users,dinamic_requests WHERE request_userid=user_id AND request_id=".$id_request;
 		$data = $this->mysql->get_data($sql,'clean');
+		return $data;
+	}
+	
+	function get_by_user($user_id){
+		$sql = "SELECT * FROM dinamic_users,dinamic_requests WHERE request_userid=user_id AND user_id=".$user_id;
+		$data = $this->mysql->get_datas($sql,'clean');
 		return $data;
 	}
 	
@@ -72,12 +77,12 @@ class data_permohonan extends CI_Model{
 	
 	function status($request=null){
 		$data = array();
-		$sql = "SELECT setting_value as status FROM dinamic_settings WHERE setting_key='status_permohonan'";
+		$sql = "SELECT var_value as status FROM dinamic_vars WHERE var_key='status_permohonan'";
 		if($request=='default'){
-			$sql .= " AND setting_status='default'";
+			$sql .= " AND var_opt='active'";
 			$data = $this->mysql->get_data($sql,'clean');
 		}else{
-			$sql .= " ORDER BY setting_id";
+			$sql .= " ORDER BY var_keyid";
 			$top = $this->mysql->get_datas($sql,'clean');
 			foreach($top as $tip){
 				$data[] = $tip['status'];
@@ -97,8 +102,9 @@ class data_permohonan extends CI_Model{
 	}
 	
 	function set_status($request){
-		$this->mysql->query("UPDATE dinamic_requests SET request_status='".$request['status']."', request_status_reason='".$request['reason']."', request_nomor='".$request['nomor']."' WHERE request_id=".$request['request']);
-		$data = $this->get($request['request']);
+		//$this->mysql->query("UPDATE dinamic_requests SET request_status='".$request['status']."', request_status_reason='".$request['reason']."', request_nomor='".$request['nomor']."' WHERE request_id=".$request['request']);
+		$this->mysql->query("UPDATE dinamic_requests SET request_status='".$request['status']."', request_status_reason='".$request['reason']."' WHERE request_id=".$request['id']);
+		$data = $this->get($request['id']);
 		$data['status'] = 'success'; 
 		return $data;
 	}

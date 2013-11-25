@@ -8,7 +8,7 @@ class mod_menu extends KIP_Controller {
 		$type   = to_data(@$_POST['type']);
 		$action = to_data(@$_POST['action']);	
 		switch($action){
-			case 'view':
+			case 'edit':
 				$menu = intval(@$_POST['menu']);
 				$icox = $this->data_menu->get_icons();
 				$data['icox'] = json_decode($icox['var_value']);
@@ -38,7 +38,7 @@ class mod_menu extends KIP_Controller {
 			case 'delete':
 				$menu = intval(@$_POST['menu']);
 				$res = $this->data_menu->delete($menu);
-				if(count($res)<1) echo 'ok';
+				if(count($res)<1) echo json_encode(array('status'=>'success'));
 				
 				break;
 		

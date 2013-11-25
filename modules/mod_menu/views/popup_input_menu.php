@@ -86,6 +86,7 @@
 		var guwe = $(this);
 		var icon = guwe.attr('name');
 		var form = $('.form-popup');
+		var icos = form.find('.pilih-icon');
 		var view = form.find('span[name="ico-view"]');
 		var targ = form.find('.ico-target');
 		targ.val(icon);
@@ -96,6 +97,7 @@
 	$('.bt-delete-icon').click(function(){
 		var guwe = $(this);
 		var form = $('.form-popup');
+		var icos = form.find('.pilih-icon');
 		var view = form.find('span[name="ico-view"]');
 		var targ = form.find('.ico-target');
 		targ.val('');

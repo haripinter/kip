@@ -14,7 +14,7 @@ class KIP_Controller extends CI_Controller {
 			$this->config->set_item($conf['config_key'],$val);
 		}
 		$this->config->set_item('admin_theme',base_url().admin_skin(config_item('skin_admin')));
-		$this->config->set_item('public_theme',base_url().admin_skin(config_item('skin_frontpage')));
+		$this->config->set_item('public_theme',base_url().home_skin(config_item('skin_frontpage')));
 		
 		$this->config->set_item('admin_menu',$this->data_menu->get_all('admin'));
 		$this->config->set_item('public_menu',$this->data_menu->get_all('public'));

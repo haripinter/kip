@@ -10,7 +10,7 @@ class mod_tautan extends KIP_Controller {
 		
 		$action = to_data(@$_POST['action']);
 		switch($action){
-			case 'view':
+			case 'edit':
 				$tautan = intval(@$_POST['id']);
 				$data['tautan'] = $this->data_tautan->get($tautan);
 				$this->load->view('popup_input_tautan',$data);
@@ -40,8 +40,8 @@ class mod_tautan extends KIP_Controller {
 					$cek = $this->data_dokumen->get_by_key($key,$resp['tautan_id']);
 					$folder = 'media/tautan/';
 					if(count($cek)>0){
-						if($cek['media_realname']!='' && file_exists($folder.$cek['media_realname'])){
-							unlink($folder.$cek['media_realname']);
+						if($cek['media_realname']!='' && file_exists(urldecode($folder.$cek['media_realname']))){
+							unlink(urldecode($folder.$cek['media_realname']));
 						}
 						if($cek['media_thumbnail']!='' && file_exists($cek['media_thumbnail'])){
 							unlink(urldecode($cek['media_thumbnail']));
@@ -64,7 +64,7 @@ class mod_tautan extends KIP_Controller {
 						$tmp['keyid'] = $resp['tautan_id'];
 						$tmp['link'] = '';
 						$tmp['title'] = '';
-						$tmp['realname'] = $file['name'];
+						$tmp['realname'] = to_data($file['name']);
 						$tmp['thumbnail'] = to_data($file['thumbnailUrl']);
 						$tmp['userid'] = $id_user;
 						$tmp['id'] = intval(@$cek['media_id']);
@@ -99,7 +99,7 @@ class mod_tautan extends KIP_Controller {
 				$res = $this->data_tautan->get($tautan);
 				$res = $this->data_dokumen->delete(intval(@$res['media_id']));
 				$res = $this->data_tautan->delete($tautan);
-				if(count($res)<1) echo 'ok';
+				if(count($res)<1) echo json_encode(array('status'=>'success'));
 				
 				break;
 		

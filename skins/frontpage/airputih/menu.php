@@ -1,5 +1,4 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-$_appmenu = $site_url.'/index.php/';
 
 function generate_menu($menu=null,$opt=array()){
 	$opt['rel'] = isset($opt['rel'])? $opt['rel'] : '';
@@ -50,6 +49,6 @@ function generate_menu($menu=null,$opt=array()){
 	return $tmp;
 }
 
-$opt['site'] = $_appmenu;
-echo generate_menu($menu,$opt);
+$opt['site'] = site_url();
+echo generate_menu(config_item('public_menu'),$opt);
 ?>

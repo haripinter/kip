@@ -17,6 +17,7 @@ function Bottons($id){
 }
 
 $popup_action = site_url().'shot-menu';
+
 ?>
 <div class="row-fluid sortable">
 	<div class="box span12">
@@ -116,18 +117,20 @@ $(document).ready(function(){
 			var box = tbl.parent();
 			var pop = box.find('.modalzWindow');
 			var mug = pop.find('.modal-body');
+			var res = pop.find('.modal-result');
 			
 			// edit this
 			mug.html('Tunggu...');
 			pop.find('h4').html('Edit Menu');
 			var urls = '<?php echo $popup_action; ?>';
 			var tipe = box.parent().attr('id');
-			var data = {action:'view',type:tipe,menu:this.name};
+			var data = {action:'edit',type:tipe,menu:this.name};
 			
 			var post = $.post(urls,data);
 			post.done(function(data){
 				pop.modal('show');
 				mug.html(data);
+				res.html('');
 			});
 		});
 	}
@@ -147,9 +150,11 @@ $(document).ready(function(){
 				if(result==true){
 					var post = $.post(urls,data);
 					post.done(function(data){
-						if(data=='ok'){
+						data = $.parseJSON(data);
+						if(data['status']=='success'){
 							tbl = tbl.dataTable();
 							tbl.fnDeleteRow(tbl.fnGetPosition(tr[0]));
+							sort_tabel(tbl);
 						}
 					});
 				}
@@ -174,8 +179,11 @@ $(document).ready(function(){
 					</header>\
 					<div class="modal-body"></div>\
 					<footer class="modal-footer">\
-						<span class="pull-left modal-result"></span>\
-						<a class="btn modal-tutup">Cancel</a>\
+						<span class="pull-left">\
+							<a class="btn bt-modal-baru">Input Baru</a>\
+							<span class="modal-result"></span>\
+						</span>\
+						<a class="btn modal-tutup">Tutup</a>\
 						<a class="btn btn-success bt-zimpan">Simpan</a>\
 					</footer>\
 				  </div>';
@@ -187,6 +195,17 @@ $(document).ready(function(){
 		var mug = pop.find('.modal-body');
 		mug.html('');
 		pop.modal('hide');
+	});
+	
+	$(".modalzWindow .bt-modal-baru").click(function(){
+		var btn = $(this);
+		var box = btn.parents('.bawah-datatabel').parent();
+		var inp = box.find('input');
+		box.find('input[name="menu_id"]').val(0);
+		box.find('select[name="menu_parent"]').val(0);
+		box.find('span[name="ico-view"]').removeClass();
+		box.find('input[name="menu_title"]').val('');
+		box.find('input[name="menu_link"]').val('');
 	});
 	
 	$('.bt-datatable-add .bt-add-data').click(function(){
@@ -201,7 +220,7 @@ $(document).ready(function(){
 		pop.find('h4').html('Tambah Menu');
 		var urls = '<?php echo $popup_action; ?>';
 		var tipe = box.parent().attr('id');
-		var data = {action:'view',type:tipe,menu:this.name};
+		var data = {action:'edit',type:tipe,menu:this.name};
 		
 		var post = $.post(urls,data);
 		post.done(function(data){
@@ -245,13 +264,24 @@ $(document).ready(function(){
 				var remv = $(node).find('a.bt-delete-data');
 				
 				menu.val(data['menu_id']);
+				edit.attr('name',data['menu_id']);
+				remv.attr('name',data['menu_id']);
 				action_edit(edit);
 				action_delete(remv);
 				
 				res.html('<font color="green">Tersimpan.</font>');
 			}else if(data['status']=='update'){
-				var tr = tbl.find('.rowstbl'+data['menu_id']).parent().parent();
+				// change this
+				var fi = '.rowstbl'+data['menu_id'];
+				
+				var tr  = '';
+				var tx = tbl.fnGetNodes();
+				$(tx).each(function(){
+					var dm = $(this).find(fi);
+					if(dm.length>0) tr = dm.parent().parent();
+				});
 				var trpos = tbl.fnGetPosition(tr[0]);
+					
 				tbl.fnUpdate('<span class="'+data['menu_icon']+'"></span> '+data['menu_title'],trpos,1);
 				tbl.fnUpdate(data['menu_link'],trpos,2);
 				
@@ -259,6 +289,32 @@ $(document).ready(function(){
 			}
 		});
 	});
+	
+	function sort_tabel(tbl){
+		var trs = tbl.fnGetNodes();
+		var num = 1;
+		$(trs).each(function(){
+			var tds = $(this).find('td');
+			var spa = $(tds[0]).children('span');
+			var cen = $(tds[0]).children('center');
+			cen.html(num);
+			
+			var isi = $('<div>').append(cen).append(spa);
+			tbl.fnUpdate(isi.html(),tbl.fnGetPosition(this),0);
+			isi.remove();
+			num++;
+		});
+	}
+	
+	function sort_tabel_biasa(tbody){
+		var trs = $(tbody).children('tr');
+		var nnn = 1;
+		$(trs).each(function(){
+			var tds = $(this).children('td');
+			$(tds[0]).children('center').html(nnn);
+			nnn++;
+		});
+	}
 	
 });
 </script>

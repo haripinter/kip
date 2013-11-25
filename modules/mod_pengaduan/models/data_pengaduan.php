@@ -3,16 +3,37 @@
 class data_pengaduan extends CI_Model{
 
 	function get($id_complain){
-		$res = array();
-		if(is_numeric($id_complain)){
-			$sql = "SELECT * FROM dinamic_complains,dinamic_requests,dinamic_users WHERE complain_requestid=request_id AND request_userid=user_id AND complain_id=".$id_complain;
-			$res = $this->mysql->get_data($sql,'clean');
+		$this->load->model('mod_permohonan/data_permohonan');
+		
+		$sql = "SELECT * FROM dinamic_complains WHERE complain_id=".$id_complain;
+		$data = $this->mysql->get_data($sql,'clean');
+		
+		$reqs = array();
+		if(is_json(@$data['complain_requestid']))
+			$reqs = json_decode($data['complain_requestid']);
+		$tmps = array();
+		foreach($reqs as $reqid){
+			$tmp = $this->data_permohonan->get($reqid);
+			$tmp['request_datetime'] = datetime_tgl($tmp['request_datetime']);
+			array_push($tmps,$tmp);
 		}
-		return $res;
+		
+		$lams = array();
+		if(is_json(@$data['complain_lampiran']))
+			$lams = json_decode(@$data['complain_lampiran']);
+		$lamp = array();
+		foreach($lams as $lam){
+			$tmp['name'] = $lam;
+			$tmp['url'] = 'media/lampiran/'.$lam;
+			array_push($lamp,$tmp);
+		}
+		$data['lampiran'] = $lamp;
+		$data['request'] = $tmps;
+		return $data;
 	}
 	
 	function get_all($order='',$request_order='ASC',$limit=0){
-		$sql = "SELECT * FROM dinamic_complains,dinamic_requests,dinamic_users WHERE complain_requestid=request_id AND request_userid=user_id";
+		$sql = "SELECT * FROM dinamic_complains,dinamic_users where complain_userid=user_id ";
 		if($request_order=='DESC'){
 			$request_order = 'DESC';
 		}else{
@@ -28,26 +49,28 @@ class data_pengaduan extends CI_Model{
 		if(is_numeric($limit) && $limit>0){
 			$sql .= 'LIMIT '.$limit;
 		}
-		$res = $this->mysql->get_datas($sql,'clean');
-		return $res;
+		$data = $this->mysql->get_datas($sql,'clean');
+		return $data;
 	}
 	
 	function insert($complain){
-		$res = array();
+		$data = array();
 		$status = $this->status('active');
 		if($complain['complain_id']>0){
-			$this->mysql->query("UPDATE dinamic_complains SET complain_reason='".$complain['reason']."', complain_case='".$complain['case']."', complain_date='".$complain['date']."' WHERE complain_status='".$status['status']."' AND complain_id=".$complain['complain_id']);
-			$res = $this->get($complain['complain_id']);
+			$this->mysql->query("UPDATE dinamic_complains SET complain_requestid='".$complain['requestid']."', complain_reason='".$complain['reason']."', complain_case='".$complain['case']."', complain_lampiran='".$complain['lampiran']."' WHERE complain_status='".$status['status']."' AND complain_id=".$complain['complain_id']);
+			$data = $this->get($complain['complain_id']);
 		}else{
 			$maxid = $this->mysql->get_maxid('complain_id','dinamic_complains');
-			$this->mysql->query("INSERT INTO dinamic_complains(complain_id,complain_requestid,complain_reason,complain_case,complain_date,complain_datetime,complain_status) VALUES(".$maxid.",'".$complain['requestid']."','".$complain['reason']."','".$complain['case']."','".$complain['date']."',NOW(),'".$status['status']."')");
-			$res = $this->get($maxid);
+			$this->mysql->query("INSERT INTO dinamic_complains(complain_id,complain_requestid,complain_reason,complain_case,complain_datetime,complain_status,complain_lampiran) VALUES(".$maxid.",'".$complain['requestid']."','".$complain['reason']."','".$complain['case']."',NOW(),'".$status['status']."','".$complain['lampiran']."')");
+			$data = $this->get($maxid);
 		}
-		return $res;
+		return $data;
 	}
 	
 	function delete($id_complain){
 		$this->mysql->query("DELETE FROM dinamic_complains WHERE complain_id=".$id_complain);
+		$data = $this->get($id_complain);
+		return $data;
 	}
 	
 	/*
@@ -95,18 +118,30 @@ class data_pengaduan extends CI_Model{
 	}
 	
 	function get_status($complain_id=0){
-		$tmp = '';
-		if(intval($complain_id)>0){
-			$sql = "SELECT complain_status AS status FROM dinamic_complains WHERE complain_id=".$complain_id;
-			$tmp = $this->mysql->get_data($sql);
-			return $tmp['status'];
-		}
-		return $tmp;
+		$sql = "SELECT complain_status AS status FROM dinamic_complains WHERE complain_id=".$complain_id;
+		$data = $this->mysql->get_data($sql,'clean');
+		return $data['status'];
 	}
 	
 	function set_status($data){
-		$this->mysql->query("UPDATE dinamic_complains SET complain_nomor='".$data['nomor']."', complain_status='".$data['status']."', complain_status_reason='".$data['reason']."' WHERE complain_id=".$data['complain']);
-		return $this->get_status($data['complain']);
+		$this->mysql->query("UPDATE dinamic_complains SET complain_status='".$data['status']."', complain_status_reason='".$data['reason']."' WHERE complain_id=".$data['id']);
+		$data = $this->get($data['id']);
+		$data['status'] = 'success'; 
+		return $data;
+	}
+	
+	function remove_file($complain_id,$fname){
+		$data = $this->get($complain_id);
+		$lams = json_decode($data['complain_lampiran']);
+		$lamp = array();
+		foreach($lams as $lam){
+			if($lam!=$fname){
+				array_push($lamp,$lam);
+			}
+		}
+		$news = json_encode($lamp);
+		$this->mysql->query("UPDATE dinamic_complains SET complain_lampiran='".$news."' WHERE complain_id=".$complain_id);
+		return $this->get($complain_id);
 	}
 }
 ?>

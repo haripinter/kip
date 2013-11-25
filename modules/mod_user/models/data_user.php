@@ -2,13 +2,10 @@
 
 class data_user extends CI_Model{
 
-	function get($id_user){
-		$res = array();
-		if(is_numeric($id_user)){
-			$sql = "SELECT * FROM dinamic_users WHERE user_id=".$id_user;
-			$res = $this->mysql->get_data($sql);
-		}
-		return $res;
+	function get($user_id){
+		$sql = "SELECT * FROM dinamic_users WHERE user_id=".$user_id;
+		$data = $this->mysql->get_data($sql,'clean');
+		return $data;
 	}
 	
 	function get_all($order='',$request_order='ASC',$limit=0){
@@ -28,8 +25,8 @@ class data_user extends CI_Model{
 		if(is_numeric($limit) && $limit>0){
 			$sql .= 'LIMIT '.$limit;
 		}
-		$res = $this->mysql->get_datas($sql);
-		return $res;
+		$data = $this->mysql->get_datas($sql);
+		return $data;
 	}
 	
 	function insert($user){
@@ -39,50 +36,46 @@ class data_user extends CI_Model{
 			
 		}else{
 			$maxid = $this->mysql->get_maxid('user_id','dinamic_users');
-			$pass = md5($user['pass1']);
-			$keys = $this->kip->randkey(33);
-			$scan = $user['scan_name'];
-			$this->mysql->query("INSERT INTO dinamic_users(user_id,user_email,user_pass,user_fullname,user_address,user_phone,user_ktp,user_scanktp,user_registered,user_activationkey,user_status,user_expired_key) VALUES(".$maxid.",'".$user['email']."','".$pass."','".$user['fullname']."','".$user['address']."','".$user['phone']."','".$user['ktp']."','".$scan."',NOW(),'".$keys."',0,(NOW()+INTERVAL 1 DAY))");
-			$res = $this->get($maxid);
-			//echo "INSERT INTO dinamic_users(user_id,user_email,user_pass,user_fullname,user_address,user_phone,user_ktp,user_scanktp,user_registered,user_activationkey,user_status) VALUES(".$maxid.",'".$user['email']."','".$pass."','".$user['fullname']."','".$user['address']."','".$user['phone']."','".$user['ktp']."','".$scan."',NOW(),'".."',0)";
+			$this->mysql->query("INSERT INTO dinamic_users(user_id,user_email,user_pass,user_fullname,user_address,user_phone,user_ktp,user_scanktp,user_registered,user_activationkey,user_status,user_expired_key) VALUES(".$maxid.",'".$user['email']."','".$user['pass']."','".$user['fullname']."','".$user['address']."','".$user['phone']."','".$user['ktp']."','".$user['scan']."',NOW(),'".$user['keys']."',0,(NOW()+INTERVAL 1 DAY))");
+			$data = $this->get($maxid);
 			/*
 			user_status = 0 -> pending, 1 -> active, 2->banned;
 			*/
 		}
-		return $res;
+		return $data;
 	}
 	
-	function delete($id_user){
-		$this->mysql->query("DELETE FROM dinamic_users WHERE user_id=".$id_user);
+	function delete($user_id){
+		$this->mysql->query("DELETE FROM dinamic_users WHERE user_id=".$user_id);
+		return $this->get($user_id);
 	}
 	
 	function isdouble($email){
-		$res = array();
 		$sql = "SELECT * FROM dinamic_users WHERE user_email='".$email."'";
-		$res = $this->mysql->get_data($sql);
-		return $res;
+		$data = $this->mysql->get_data($sql);
+		return $data;
 	}
 	
 	function activate($keys){
-		$res = array();
 		$sql = "SELECT * FROM dinamic_users WHERE user_activationkey='".$keys."' AND user_expired_key>NOW()";
-		$res = $this->mysql->get_data($sql);
-		if(@$res['user_id']>0){
-			$this->mysql->query("UPDATE dinamic_users SET user_status=1 WHERE user_id=".@$res['user_id']);
-			$res['result'] = 'success';
+		$data = $this->mysql->get_data($sql);
+		if(@$data['user_id']>0){
+			$this->mysql->query("UPDATE dinamic_users SET user_status=1 WHERE user_id=".@$data['user_id']);
+			$data['result'] = 'success';
 		}else{
-			$res['result'] = 'expired';
+			$data['result'] = 'expired';
 		}
-		return $res;
+		return $data;
 	}
 	
 	function renew_activation($email){
-		$keys = $this->kip->randkey(33);
-		$res = $this->isdouble($email);
-		if(@$res['user_id']>0){
+		$keys = randkey(33);
+		$data = $this->isdouble($email);
+		if(@$data['user_id']>0){
 			$this->mysql->query("UPDATE dinamic_users SET user_activationkey='".$keys."', user_expired_key=(NOW()+INTERVAL 1 DAY) WHERE user_email='".$email."'");
+			$data['status'] = 'success';
 		}
-		return $res;
+		return $data;
 	}
 }
 ?>

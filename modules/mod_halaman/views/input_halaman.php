@@ -1,67 +1,39 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-$post_id = (isset($berita['post_id']))? $berita['post_id'] : 0;
-$post_title = (isset($berita['post_title']))? $berita['post_title'] : '';
-$post_content = (isset($berita['post_content']))? $berita['post_content'] : '';
-$post_created = (isset($berita['post_created']))? $berita['post_created'] : '';
-$post_expired = (isset($berita['post_expired']))? $berita['post_expired'] : '';
+$id = intval(@$halaman['post_id']);
+$title = @$halaman['post_title'];
+$content = to_content(@$halaman['post_content']);
+$link = to_content(@$halaman['post_staticlink']);
 
+$action = site_url().'shot-halaman';
 ?>
 <div class="row-fluid sortable">
 	<div class="box span12">
 		<div class="box-header well" data-original-title>
 			<h2><i class="icon-picture"></i> INFORMASI STATIS</h2>
 		</div>
-		<div class="box-berita" style="padding:10px">
-			<form class="form-horizontal" method="post" action="<?php echo $site_url; ?>/index.php/root/informasi/1/insert">
-				<div class="span9" style="margin-bottom:50px">
-					<input type="hidden" name="post_id" value="<?php echo intval($post_id); ?>">
+		<div class="box-halaman" style="padding:10px">
+			<form id="frm_halaman">
+				<div class="span12" style="margin-bottom:50px">
+					<input type="hidden" name="action" value="save">
+					<input type="hidden" name="id" value="<?php echo $id; ?>">
+					<div>
+						<div class="pull-left" style="margin-top: 2px;"><b>Link : </b><?php echo site_url(); ?>page/</div><input type="text" name="link" value="<?php echo $link; ?>" style="border-radius:0px; height:15px"/>
+					</div>
 					<div style="margin-bottom:10px;">
-						<input type="text" class="span12" name="judul" value="<?php echo $post_title; ?>" placeholder="Judul Informasi"/>
+						<input type="text" class="span12" name="title" value="<?php echo $title; ?>" placeholder="Judul Informasi"/>
 					</div>
 					<div class="control-group">
-							<textarea class="cleditor" name="isi"><?php echo $post_content; ?></textarea>
+							<textarea class="cleditor" name="content"><?php echo $content; ?></textarea>
+					</div>
+					<div class="pull-left">
+						<input type="button" class="btn bt-back"  value="Kembali"/>
+						<span class="result"></span>
 					</div>
 					<div class="pull-right">
-						<button type="reset" class="btn btn">Batal</button>
-						<button type="submit" class="btn btn-success" name="berita" value="Zimpan">Simpan</button>
+						<input type="button" class="btn bt-new"  value="Baru"/>
+						<input type="button" class="btn btn-success bt-simpan" value="Simpan"/>
 					</div>
-				</div>
-				<div class="span3">
-					<div class="box span12" style="margin-top:0px">
-						<div class="box-header well">
-							<h2><i class="icon-picture"></i> Pengaturan</h2>
-						</div>
-						<div class="box-content" style="padding:10px">
-							<table>
-								<tr>
-									<td>Tanggal Terbit</td>
-									<td>:</td>
-									<td><input type="text" class="tanggalan" name="start" value="<?php echo datetime_tgl($post_created); ?>" style="width:100px"></td>
-								</tr>
-								<tr>
-									<td>Kadaluarsa</td>
-									<td>:</td>
-									<td><input type="text" class="tanggalan" name="stop" value="<?php echo datetime_tgl($post_expired); ?>" style="width:100px"></td>
-								</tr>
-								<tr>
-									<td>Teks Berjalan*</td>
-									<td>:</td>
-									<td><input type="checkbox" name="marquee"></td>
-								</tr>
-								<tr>
-									<td>Kategori</td>
-									<td>:</td>
-									<td></td>
-								</tr>
-							</table>
-							
-						</div>
-						
-					</div>
-					<div>
-							* Yang jadi teks berjalan hanya judulnya.
-							</div>
 				</div>
 			</form>
 		</div>
@@ -69,10 +41,44 @@ $post_expired = (isset($berita['post_expired']))? $berita['post_expired'] : '';
 </div>
 
 <script>
-$( ".tanggalan" ).datepicker({
-	changeMonth: true,
-	changeYear: true,
-	/*yearRange: "-100:+0",*/
-	dateFormat:"dd/mm/yy"
+$(document).ready(function(){
+	$('.bt-simpan').click(function(){
+		var res = $('#frm_halaman').find('span.result');
+		res.html('Sedang menyimpan...');
+		
+		var frm = $('#frm_halaman');
+		var data = frm.serializeArray();
+		var urls = '<?php echo $action; ?>';
+		var post = $.post(urls,data);
+		post.done(function(data){
+			data = $.parseJSON(data);
+			if(data['status']=='insert'){
+				res.html('<font color="green">Data Tersimpan.</font>');
+			}else if(data['status']=='update'){
+				res.html('<font color="green">Data Terupdate.</font>');
+			}else{
+			}
+		});
+	});
+	
+	$('.bt-back').click(function(){
+		window.location='<?php echo site_url(); ?>admin/halaman';
+	});
+	
+	$('.bt-new').click(function(){
+		var frm = $('#frm_halaman');
+		var tid = frm.find('input[name="id"]');
+		var ttl = frm.find('input[name="title"]');
+		var cnt = frm.find('textarea[name="content"]');
+		var lnk = frm.find('input[name="link"]');
+		
+		tid.val(0);
+		ttl.val('');
+		cnt.val('');
+		lnk.val('');
+		
+		var con = cnt.cleditor()[0];
+		con.updateFrame();
+	});
 });
 </script>

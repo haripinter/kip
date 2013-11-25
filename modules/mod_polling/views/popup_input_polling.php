@@ -1,12 +1,11 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-$parent = $polling['parent'];
-
+$parent = $polling;
 ?>
 <form>
 	<input type="hidden" name="action" value="save">
 	<input type="hidden" name="section" value="parent">
-	<input type="hidden" name="polling_id" value="<?php echo @$parent['polling_id']; ?>">
+	<input type="hidden" name="id" value="<?php echo intval(@$parent['polling_id']); ?>">
 	<table width="100%">
 		<tbody>
 			<tr>
@@ -22,7 +21,7 @@ $parent = $polling['parent'];
 					<span><input type="text" name="stop" value="<?php echo datetime_tgl(@$parent['polling_stop']); ?>" class="tanggalan" style="width:100px"></span>
 				</td>
 			</tr>
-			<tr>
+			<!--tr>
 				<td>Status</td>
 				<td>:</td>
 				<td>
@@ -32,7 +31,7 @@ $parent = $polling['parent'];
 						<option value="off" <?php echo @$selec['off']; ?>>Tidak Aktif</option>
 					</select>
 				</td>
-			</tr>
+			</tr-->
 		</tbody>
 	</table>
 </form>

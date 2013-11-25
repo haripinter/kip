@@ -15,6 +15,8 @@ $(document).ready(function(){
 			$(this).parent().addClass('active');
 	});
 	
+	
+	
 	//ajaxify menus
 	$('a.ajax-link').click(function(e){
 		//if($.browser.msie){
@@ -71,3 +73,4 @@ $(document).ready(function(){
 		$('.cleditor').cleditor();
 	//});
 });
+

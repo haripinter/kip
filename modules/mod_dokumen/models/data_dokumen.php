@@ -50,7 +50,7 @@ class data_dokumen extends CI_Model{
 	function insert($media){
 		$data = array();
 		if($media['id']>0){
-			$this->mysql->query("UPDATE dinamic_media SET media_title='".$media['title']."',media_realname='".$media['realname']."', media_thumbnail='".$media['thumbnail']."', media_userid=".$media['userid'].", media_datetime=NOW() WHERE media_key='".$media['key']."' AND media_id=".$media['id']);
+			$this->mysql->query("UPDATE dinamic_media SET media_title='".$media['title']."',media_realname='".$media['realname']."', media_thumbnail='".$media['thumbnail']."', media_updated=NOW() WHERE media_key='".$media['key']."' AND media_id=".$media['id']);
 			$data = $this->get($media['id']);
 		}else{
 			$maxid = $this->mysql->get_maxid('media_id','dinamic_media');
@@ -72,9 +72,9 @@ class data_dokumen extends CI_Model{
 		return $this->get_by_key($key,$id);
 	}
 	
-	function change_title($media_id){
-		$this->mysql->query("UPDATE dinamic_media SET media_title='".$media['media_title']."' WHERE media_id=".$media_id);
-		return $this->get($media_id);
+	function change_title($media){
+		$this->mysql->query("UPDATE dinamic_media SET media_title='".$media['title']."' WHERE media_id=".$media['id']);
+		return $this->get($media['id']);
 	}
 	
 	function viewed($media_id){

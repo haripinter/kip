@@ -2,26 +2,34 @@
 
 class data_polling extends CI_Model{
 	// Ambil polling tertentu
-	function get($id_polling=0){
-		$tmp['parent'] = array();
-		$tmp['children'] = array();
-		if(is_numeric($id_polling)){
-			if($id_polling==0){
-				$polling = $this->mysql->get_data("SELECT polling_id FROM dinamic_pollings WHERE polling_status='on'");
-				$id_polling = $polling['polling_id'];
-			}
+	function get($id=0,$opt=''){
+		$data = array();
+		if($opt=='full'){
+			$data['parent'] = array();
+			$data['children'] = array();
 			
-			$sql = "SELECT * FROM dinamic_pollings WHERE polling_key='parent' AND polling_id=".$id_polling;
+			// jika polling_id dan option default
+			// maka tampilkan polling yang sedang aktif
+			/*
+			if(intval($polling_id)==0){
+				$polling = $this->mysql->get_data("SELECT polling_id FROM dinamic_pollings WHERE polling_status='on'");
+				$polling_id = $polling['polling_id'];
+			}*/
+			
+			$sql = "SELECT * FROM dinamic_pollings WHERE polling_key='parent' AND polling_id=".$id;
 			$res = $this->mysql->get_data($sql,'clean');
-			$tmp['parent'] = $res;
+			$data['parent'] = $res;
 			
 			$sql = "SELECT * FROM dinamic_pollings WHERE polling_key='".@$res['polling_id']."' ORDER BY polling_id";
 			$res = $this->mysql->get_datas($sql,'clean');
 			foreach($res as $ser){
-				array_push($tmp['children'],$ser);
+				array_push($data['children'],$ser);
 			}
+		}else{
+			$sql = "SELECT * FROM dinamic_pollings WHERE polling_id=".$id;
+			$data = $this->mysql->get_data($sql,'clean');
 		}
-		return $tmp;
+		return $data;
 	}
 	
 	// Ambil daftar polling
@@ -41,11 +49,11 @@ class data_polling extends CI_Model{
 			$sql .= ' ORDER BY polling_id '.$request_order;
 		}
 		
-		if(is_numeric($limit) && $limit>0){
+		if(intval($limit)>0){
 			$sql .= 'LIMIT '.$limit;
 		}
 		$parent = $this->mysql->get_datas($sql,'clean');
-		$res = array();
+		$data = array();
 		foreach($parent as $p){
 			$dmb = array();
 			$dmb['parent'] = $p;
@@ -55,28 +63,56 @@ class data_polling extends CI_Model{
 			foreach($children as $c){
 				array_push($dmb['children'],$c);
 			}
-			array_push($res,$dmb);
+			array_push($data,$dmb);
 		}
-		return $res;
+		return $data;
 	}
 	
 	function insert($polling){
-		$polling_id = $this->mysql->get_maxid('polling_id','dinamic_pollings');
-		$this->mysql->query("INSERT INTO dinamic_pollings(polling_id,polling_key,polling_name) VALUES(".$polling_id.",'".$polling['polling_key']."','".$polling['polling_name']."')");
-		$res = $this->mysql->get_data("SELECT polling_id,polling_name FROM dinamic_pollings WHERE polling_id=".$polling_id,'clean');
-		return $res;
+		$id = $polling['id'];
+		
+		$status = 'insert';
+		$cek = $this->get($id);
+		
+		if(count($cek)>0){
+			if($polling['key']=='parent'){
+				$this->mysql->query("UPDATE dinamic_pollings SET polling_name='".$polling['name']."', polling_start='".$polling['start']."', polling_stop='".$polling['stop']."' WHERE polling_id=".$id);
+			}else{
+				$this->mysql->query("UPDATE dinamic_pollings SET polling_name='".$polling['name']."' WHERE polling_id=".$id);
+			}
+			$status = 'update';
+		}else{
+			$id = $this->mysql->get_maxid('polling_id','dinamic_pollings')+1;
+			if($polling['key']=='parent'){
+				$this->mysql->query("INSERT INTO dinamic_pollings(polling_id,polling_key,polling_name,polling_start,polling_stop) VALUES(".$id.",'".$polling['key']."','".$polling['name']."','".$polling['start']."','".$polling['stop']."')");
+			}else{
+				$this->mysql->query("INSERT INTO dinamic_pollings(polling_id,polling_key,polling_name) VALUES(".$id.",'".$polling['key']."','".$polling['name']."')");
+			}
+		}
+		
+		$data = $this->get($id);
+		$data['status'] = $status;
+		return $data;
 	}
 	
 	// Delete polling
-	function delete($id_polling){
-		$this->mysql->query("DELETE FROM dinamic_pollings WHERE polling_id=".$id_polling);
-		$this->mysql->query("DELETE FROM dinamic_pollings WHERE polling_key='".$id_polling."'");
+	function delete($id){
+		$this->mysql->query("DELETE FROM dinamic_pollings WHERE polling_id=".$id);
+		return $this->get($id);
+	}
+	
+	// Delete polling by parent
+	function delete_all($id){
+		$this->mysql->query("DELETE FROM dinamic_pollings WHERE polling_key=".$id);
+		$this->mysql->query("DELETE FROM dinamic_pollings WHERE polling_id=".$id);
+		return $this->get($id);
 	}
 	
 	function change_name($polling){
-		$this->mysql->query("UPDATE dinamic_pollings SET polling_name='".$polling['polling_name']."' WHERE polling_id=".$polling['polling_id']);
-		$res = $this->mysql->get_data("SELECT polling_id,polling_name FROM dinamic_pollings WHERE polling_id=".$polling['polling_id'],'clean');
-		return $res;
+		//$this->mysql->query("UPDATE dinamic_pollings SET polling_name='".$polling['polling_name']."' WHERE polling_id=".$polling['polling_id']);
+		//$data = $this->get("SELECT polling_id,polling_name FROM dinamic_pollings WHERE polling_id=".$polling['polling_id'],'clean');
+		//return $data;
 	}
+	
 }
 ?>

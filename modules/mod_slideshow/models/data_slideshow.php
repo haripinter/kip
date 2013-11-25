@@ -2,13 +2,10 @@
 
 class data_slideshow extends CI_Model{
 	// Ambil berita tertentu
-	function get($id_gambar){
-		$res = array();
-		if(is_numeric($id_gambar)){
-			$sql = "SELECT * FROM dinamic_media WHERE media_key='gambar' AND media_id=".$id_gambar;
-			$res = $this->mysql->get_data($sql);
-		}
-		return $res;
+	function get($media_id){
+		$sql = "SELECT * FROM dinamic_media WHERE media_key='slideshow' AND media_id=".$media_id;
+		$data = $this->mysql->get_data($sql,'clean');
+		return $data;
 	}
 	
 	// Ambil daftar gambar
@@ -16,7 +13,7 @@ class data_slideshow extends CI_Model{
 	// request_order string 'desc'|'asc'
 	// limit int
 	function get_all($order='',$request_order='ASC',$limit=0){
-		$sql = "SELECT * FROM dinamic_media WHERE media_key='gambar'";
+		$sql = "SELECT * FROM dinamic_media WHERE media_key='slideshow'";
 		if($request_order=='DESC'){
 			$request_order = 'DESC';
 		}else{
@@ -34,24 +31,35 @@ class data_slideshow extends CI_Model{
 		if(is_numeric($limit) && $limit>0){
 			$sql .= 'LIMIT '.$limit;
 		}
-		$res = $this->mysql->get_datas($sql);
-		return $res;
+		$data = $this->mysql->get_datas($sql,'clean');
+		return $data;
 	}
 	
 	// Input gambar
-	function insert($gambar){
-		if($gambar['media_id']>0){
-			//mysql_query("UPDATE dinamic_posts SET post_created='".$berita['start']."', post_updated=NOW(), post_expired='".$berita['stop']."', post_title='".$berita['judul']."', post_content='".$berita['isi']."',post_marquee='".$berita['marquee']."' WHERE post_id=".$berita['post_id']);
-			
+	function insert($media){
+		if($media['id']>0){
+			$this->mysql->query("UPDATE dinamic_media SET media_title='".$media['title']."', media_description='".$media['description']."', media_status='".$media['status']."', media_updated=NOW() WHERE media_key='slideshow' AND media_id=".$media['id']);
+			$data = $this->get($media['id']);
+			$data['status'] = 'update';
 		}else{
 			$maxid = $this->mysql->get_maxid('media_id','dinamic_media');
-			//mysql_query("INSERT INTO dinamic_posts(post_id,post_userid,post_created,post_expired,post_title,post_content,post_status,post_commentstatus,post_marquee) VALUES(".$maxid.",1,'".$berita['start']."','".$berita['stop']."','".$berita['judul']."','".$berita['isi']."',1,1,'".$berita['marquee']."')");
+			$this->mysql->query("INSERT INTO dinamic_media(media_id,media_key,media_title,media_description,media_status,media_userid,media_datetime) VALUES(".$maxid.",'slideshow','".$media['title']."','".$media['description']."','on',".$media['userid'].",NOW())");
+			$data = $this->get($maxid);
+			$data['status'] = 'insert';
 		}
+		return $data;
 	}
 	
 	// Delete berita
-	function delete($id_gambar){
-		mysql_query("DELETE FROM dinamic_media WHERE media_id=".$id_gambar);
+	function delete($media_id){
+		$this->mysql->query("DELETE FROM dinamic_media WHERE media_id=".$media_id);
+		return $this->get($media_id);
+	}
+	
+	// ganti gambar
+	function change_image($media){
+		$this->mysql->query("UPDATE dinamic_media SET media_realname='".$media['realname']."', media_thumbnail='".$media['thumbnail']."' WHERE media_id=".$media['id']);
+		return $this->get($media['id']);
 	}
 }
 ?>

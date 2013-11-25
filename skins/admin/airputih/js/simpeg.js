@@ -62,9 +62,16 @@ $(document).ready(function(){
 
 	//highlight current / active link
 	$('ul.main-menu li a').each(function(e){
-		if($($(this))[0].href==String(window.location))
+		var lnk = String(window.location);
+		var inp = lnk.indexOf('/input');
+		var viw = lnk.indexOf('/view');
+		if(inp>0) lnk = lnk.substr(0,inp);
+		if(viw>0) lnk = lnk.substr(0,viw);
+		if($($(this))[0].href == lnk){
 			$(this).parent().addClass('active');
+		}
 	});
+	
 
 	$('ul.main-menu li a').each(function(e){
 		var url = $(this).attr('href');
@@ -96,8 +103,8 @@ $(document).ready(function(){
 		//$('#content').fadeOut().parent().append('<div id="loading" class="center">Loading...<div class="center"></div></div>');
 		var $clink=$(this);
 		////History.pushState(null, null, clink.attr('href'));
-		$('ul.main-menu li.active').removeClass('active');
-		$clink.parent('li').addClass('active');	
+		//$('ul.main-menu li.active').removeClass('active');
+		//$clink.parent('li').addClass('active');	
 		////alert(clink.attr('href'))
 		
 		var url = $clink.attr('name');

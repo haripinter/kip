@@ -11,8 +11,10 @@ var ddlevelsmenu={
 enableshim: true, //enable IFRAME shim to prevent drop down menus from being hidden below SELECT or FLASH elements? (tip: disable if not in use, for efficiency)
 
 arrowpointers:{
-	downarrow: ["ddlevelsfiles/arrow-down.gif", 11,7], //[path_to_down_arrow, arrowwidth, arrowheight]
-	rightarrow: ["ddlevelsfiles/arrow-right.gif", 12,12], //[path_to_right_arrow, arrowwidth, arrowheight]
+	//downarrow: ["home-airputih/img/arrow-down.gif", 11,7], //[path_to_down_arrow, arrowwidth, arrowheight]
+	//rightarrow: ["home-airputih/img/arrow-right.gif", 12,12], //[path_to_right_arrow, arrowwidth, arrowheight]
+	//downarrow: ["home-airputih/img/none.gif", 11,7], //[path_to_down_arrow, arrowwidth, arrowheight]
+	//rightarrow: ["home-airputih/img/none.gif", 12,12], //[path_to_right_arrow, arrowwidth, arrowheight]
 	showarrow: {toplevel: true, sublevel: true} //Show arrow images on top level items and sub level items, respectively?
 },
 hideinterval: 200, //delay in milliseconds before entire menu disappears onmouseout.
@@ -68,12 +70,12 @@ isContained:function(m, e){
 
 addpointer:function(target, imgclass, imginfo, BeforeorAfter){
 	var pointer=document.createElement("img")
-	pointer.src=imginfo[0]
+	/*pointer.src=imginfo[0]
 	pointer.style.width=imginfo[1]+"px"
 	pointer.style.height=imginfo[2]+"px"
 	if(imgclass=="rightarrowpointer"){
 		pointer.style.left=target.offsetWidth-imginfo[2]-2+"px"
-	}
+	}*/
 	pointer.className=imgclass
 	var target_firstEl=target.childNodes[target.firstChild.nodeType!=1? 1 : 0] //see if the first child element within A is a SPAN (found in sliding doors technique)
 	if (target_firstEl && target_firstEl.tagName=="SPAN"){

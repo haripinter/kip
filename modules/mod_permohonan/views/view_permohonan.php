@@ -1,6 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 $total = $statistik_status[count($statistik_status)-1]['jumlah'];
+$popup_action = site_url().'shot-permohonan';
 
 function Bottons($id){
 	return '<div class="btn-group dropup">
@@ -12,7 +13,7 @@ function Bottons($id){
 				<a class="bt bt-view-data" name="'.$id.'"><span class="icon-remove"></span> View</a>
 			</li>
 			<li>
-				<a class="bt bt-edit-data linked'.$id.'" name="'.$id.'" href="#modalwin" data-toggle="modal"><span class="icon-edit"></span> Edit</a>
+				<a class="bt bt-edit-data" name="'.$id.'"><span class="icon-edit"></span> Ganti Status</a>
 			</li>
 			<li>
 				<a class="bt bt-delete-data" name="'.$id.'"><span class="icon-remove"></span> Delete</a>
@@ -27,16 +28,7 @@ function Bottons($id){
 			<h2><i class="icon-picture"></i> DAFTAR PERMOHONAN</h2>
 		</div>
 		<div class="box-berita" style="padding:10px">
-			<!--div id="modalwin" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<header class="modal-header">
-					<a href="#" class="close" data-dismiss="modal">x</a>
-					<h4>Ubah Status</h4>
-				</header>
-				<div class="modal-body permohonan-body">
-					Wait...
-				</div>
-			</div-->
-			<table class="table table-bordered bootstrap-datatable datatable">
+			<table class="table bootstrap-datatable datatable">
 				<thead>
 					<th width="2px">No</th>
 					<th>Pemohon</th>
@@ -50,7 +42,7 @@ function Bottons($id){
 					$n = 1;
 					foreach($request as $r){
 						$nomor = '';
-						if($r['request_nomor']!='') $nomor = "<br/>Nomor : <b>".$r['request_nomor']."</b>";
+						//if($r['request_nomor']!='') $nomor = "<br/>Nomor : <b>".$r['request_nomor']."</b>";
 						?>
 						<tr>
 							<td><center><?php echo $n++; ?></center><span class="rowstbl<?php echo $r['request_id']; ?>"></span></td>
@@ -95,7 +87,7 @@ $(document).ready(function(){
 	
 	function action_view(dom){
 		dom.click(function(){
-			location.href = '<?php echo $site_url; ?>/index.php/root/permohonan/view/'+this.name;
+			location.href = '<?php echo site_url(); ?>admin/permohonan/view/'+this.name;
 		});
 	}
 	
@@ -112,23 +104,15 @@ $(document).ready(function(){
 			// edit this
 			mug.html('Tunggu...');
 			pop.find('h4').html('Edit Status Permohonan');
-			//var urls = '<?php echo $site_url; ?>/index.php/popup/menu';
-			//var tipe = box.parent().attr('id');
-			//var data = {action:'view',type:tipe,menu:this.name};
+			var idid = btn.attr('name');
+			var urls = '<?php echo $popup_action; ?>';
+			var data = {action: 'popup_status', id: idid};
 			
-			//var post = $.post(urls,data);
-			//post.done(function(data){
-				//pop.modal('show');
-				//mug.html(data);
-			//});
-			
-			var url = '<?php echo $site_url; ?>/index.php/popup/status_permohonan/'+this.name;
-			var get = $.get(url);
-			get.done(function(data){
+			var post = $.post(urls,data);
+			post.done(function(data){
 				pop.modal('show');
 				mug.html(data);
 			});
-			
 		});
 	}
 	
@@ -140,41 +124,22 @@ $(document).ready(function(){
 			var box = tbl.parent();
 			
 			// edit this
-			//var urls = '<?php echo $site_url; ?>/index.php/popup/menu';
-			//var tipe = box.parent().attr('id');
-			//var data = {action:'delete',type:tipe,menu:this.name};
-			
-			var urls  = '<?php echo $site_url; ?>/index.php/popup/permohonan_del';
 			var request_id = this.name;
-			var data = {request:request_id};
+			var urls  = '<?php echo $popup_action; ?>';
+			var data = {action:'delete', id:request_id};
 			bootbox.confirm("Anda yakin akan menghapus Permohonan ini?", function(result) {
 				if(result==true){
-					//var post = $.post(url,{request: request_id});
 					var post = $.post(urls,data);
 					post.done(function(data){
-						if(data=='ok'){
+						data = $.parseJSON(data);
+						if(data['status']=='success'){
 							tbl = tbl.dataTable();
 							tbl.fnDeleteRow(tbl.fnGetPosition(tr[0]));
+							sort_tabel(tbl);
 						}
 					});
 				}
 			});
-			
-			/*var btn = $(this);
-			var request_id = this.name;
-			bootbox.confirm("Anda yakin akan menghapus konten ini?", function(result) {
-				if(result==true){
-					var url  = '<?php echo $site_url; ?>/index.php/popup/permohonan_del';
-					var post = $.post(url,{request: request_id});
-					post.done(function(data){
-						if(data=='OK'){
-							var tr = (btn.parent().parent())[0];
-							var tabel = $('.datatable').dataTable();
-							tabel.fnDeleteRow(tabel.fnGetPosition(tr));
-						}
-					});
-				}
-			});*/
 		});
 	}
 	
@@ -195,7 +160,7 @@ $(document).ready(function(){
 					<div class="modal-body"></div>\
 					<footer class="modal-footer">\
 						<span class="pull-left modal-result"></span>\
-						<a class="btn modal-tutup">Cancel</a>\
+						<a class="btn modal-tutup">Tutup</a>\
 						<a class="btn btn-success bt-zimpan">Simpan</a>\
 					</footer>\
 				  </div>';
@@ -204,8 +169,10 @@ $(document).ready(function(){
 	$(".modalzWindow .modal-tutup").click(function(){
 		var btn = $(this);
 		var pop = btn.parents('.modalzWindow');
+		var res = pop.find('.modal-result');
 		var mug = pop.find('.modal-body');
 		mug.html('');
+		res.html('');
 		pop.modal('hide');
 	});
 	
@@ -220,22 +187,46 @@ $(document).ready(function(){
 		
 		// edit this
 		res.html('Sedang menyimpan...');
-		//var urls = '<?php echo $site_url; ?>/index.php/popup/menu';
-		//var tipe = box.parent().attr('id');
 		var data = frm.serializeArray();
-		
-		var urls = '<?php echo $site_url; ?>/index.php/popup/permohonan_save';
+		var urls = '<?php echo $popup_action; ?>';
 		var post = $.post(urls,data);
 		post.done(function(data){
 			data = $.parseJSON(data);
 			tbl  = tbl.dataTable();
 			var tr = tbl.find('.rowstbl'+data['request_id']).parent().parent();
+			console.log(tbl.find('.rowstbl'+data['request_id']).parent().parent())
 			var trpos = tbl.fnGetPosition(tr[0]);
 			tbl.fnUpdate(data['request_status'],trpos,4);
 			
 			res.html('<font color="green">Tersimpan.</font>');
 		});
 	});
+	
+	function sort_tabel(tbl){
+		var trs = tbl.fnGetNodes();
+		var num = 1;
+		$(trs).each(function(){
+			var tds = $(this).find('td');
+			var spa = $(tds[0]).children('span');
+			var cen = $(tds[0]).children('center');
+			cen.html(num);
+			
+			var isi = $('<div>').append(cen).append(spa);
+			tbl.fnUpdate(isi.html(),tbl.fnGetPosition(this),0);
+			isi.remove();
+			num++;
+		});
+	}
+	
+	function sort_tabel_biasa(tbody){
+		var trs = $(tbody).children('tr');
+		var nnn = 1;
+		$(trs).each(function(){
+			var tds = $(this).children('td');
+			$(tds[0]).children('center').html(nnn);
+			nnn++;
+		});
+	}
 });
 </script>
 
