@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Admin extends KIP_Controller {
+class admin extends KIP_Controller {
 	
 	var $template = 'admin_template';
 	

@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Frontsite extends KIP_Controller {
+class frontsite extends KIP_Controller {
 
 	var $template = 'frontpage_template';
 	

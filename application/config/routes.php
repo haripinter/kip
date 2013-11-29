@@ -38,26 +38,25 @@
 |
 */
 
-$route['default_controller'] = "Frontsite";
+$route['default_controller'] = "frontsite";
 $route['404_override'] = '';
 
-$route['admin'] = "Admin";
 $route['shot-(:any)'] = "mod_$1";
 
-$route['home.html'] = "Frontsite";
+$route['home'] = "frontsite";
 
-$route['registrasi'] = "Frontsite/registrasi";
-$route['aktivasi'] = "Frontsite/aktivasi";
-$route['aktivasi/baru'] = "Frontsite/aktivasi/baru";
-$route['download'] = "Frontsite/download";
-$route['permohonan'] = "Frontsite/permohonan";
-$route['permohonan/(:any)'] = "Frontsite/permohonan/$1";
-$route['pengaduan'] = "Frontsite/pengaduan";
-$route['pengaduan/(:any)'] = "Frontsite/pengaduan/$1";
+$route['registrasi'] = "frontsite/registrasi";
+$route['aktivasi'] = "frontsite/aktivasi";
+$route['aktivasi/baru'] = "frontsite/aktivasi/baru";
+$route['download'] = "frontsite/download";
+$route['permohonan'] = "frontsite/permohonan";
+$route['permohonan/(:any)'] = "frontsite/permohonan/$1";
+$route['pengaduan'] = "frontsite/pengaduan";
+$route['pengaduan/(:any)'] = "frontsite/pengaduan/$1";
 
-$route['berita/(:any)/(:any).html'] = "Frontsite/berita/$1/$2";
-$route['page/(:any)'] = "Frontsite/halaman/$1";
-$route['(:any).html'] = "Frontsite/$1";
+$route['berita/(:any)/(:any).html'] = "frontsite/berita/$1/$2";
+$route['page/(:any)'] = "frontsite/halaman/$1";
+$route['(:any).html'] = "frontsite/$1";
 
 
 /* End of file routes.php */
