@@ -5,10 +5,10 @@ class KIP_Controller extends CI_Controller {
     public function __construct(){
 		parent::__construct();
 		
-		$this->load->model('KIP_Config');
+		$this->load->model('mod_config/data_config');
 		$this->load->model('mod_menu/data_menu');
 		
-		$conf = $this->KIP_Config->get();
+		$conf = $this->data_config->get_all();
 		foreach($conf as $conf){
 			$val = ($conf['config_value']!='')? $conf['config_value'] : $conf['config_default'];
 			$this->config->set_item($conf['config_key'],$val);

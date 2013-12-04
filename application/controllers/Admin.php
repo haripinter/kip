@@ -150,7 +150,7 @@ class admin extends KIP_Controller {
 	function config(){
 		$this->load->model('mod_config/data_config');
 		
-		$tmp['config'] = $this->data_config->get_all();
+		$tmp['config'] = $this->data_config->get_all('input');
 		$data['content'] = $this->load->view('mod_config/view_config',$tmp,true);
 		
 		$this->load->view($this->template,$data);

@@ -325,7 +325,6 @@ $(document).ready(function(){
 					preview = '<img src="<?php echo site_url(); ?>'+preview+'" height="30px"></img>';
 				}
 				if(dota.thumbnailUrl!=''){
-					console.log(dota.thumbnailUrl)
 					preview = '<img src="<?php echo site_url(); ?>'+dota.thumbnailUrl+'?'+(Number(new Date()))+'" height="30px"></img>';
 				}
 				prv.html(preview);

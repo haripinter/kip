@@ -4,6 +4,11 @@
 <div style="padding:10px; width:100%">
 	<h2 style="font-weight:normal;">Daftar Berita</h2>
 	<table class="table">
+		<thead>
+			<th>No.</th>
+			<th>Tanggal</th>
+			<th>Judul</th>
+		</thead>
 		<tbody>
 		<?php
 		$jumlah = count($berita);
@@ -16,7 +21,7 @@
 			?>
 			<tr>
 				<td width="2px"><center><?php echo variative_number($n,$jumlah); ?>.</center></td>         
-				<td width="80px"><a href="<?php echo $url; ?>">[ <?php echo $posting; ?> ]</a></td>
+				<td width="80px"><?php echo $posting; ?></td>
 				<td><a href="<?php echo $url; ?>"><?php echo $title; ?></a></td>
 			</tr>       
 			<?php

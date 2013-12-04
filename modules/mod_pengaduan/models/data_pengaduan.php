@@ -120,7 +120,7 @@ class data_pengaduan extends CI_Model{
 	function get_status($complain_id=0){
 		$sql = "SELECT complain_status AS status FROM dinamic_complains WHERE complain_id=".$complain_id;
 		$data = $this->mysql->get_data($sql,'clean');
-		return $data['status'];
+		return @$data['status'];
 	}
 	
 	function set_status($data){

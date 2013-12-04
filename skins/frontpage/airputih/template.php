@@ -48,9 +48,9 @@ $theme = config_item('public_theme');
 		<div class="navbar-inner home-pad-header">
 			<div class="container-fluid">
 				<div class="pull-left" style="margin-top:5px; font-size:11px">
-				<b>Alamat :</b> <span style="color:green">Jl. Kota Indonesia</span> 
-				| <b>Telp & Fax :</b> <span style="color:green">1708 1945</span> 
-				| <b>Email :</b> <span style="color:green">email@indonesia.go.id</span>
+				<b>Alamat :</b> <span style="color:green"><?php echo config_item('alamat'); ?></span> 
+				| <b>Telp & Fax :</b> <span style="color:green"><?php echo config_item('telp'); ?></span> 
+				| <b>Email :</b> <span style="color:green"><?php echo config_item('email'); ?>d</span>
 				</div>
 				
 				<div class="pull-right" style="margin-top:5px; font-size:11px">
@@ -63,7 +63,7 @@ $theme = config_item('public_theme');
 		<div class="row-fluid" style="margin-top:40px;">
 			<div class="span6">
 				<div style="float:left;"><img src="<?php echo $theme; ?>img/lambang.png" style="height:50px; margin-top:-8px"></img></div>
-				<div style="float:left; margin-left:5px; font-size:1.9em; margin-top:0px; font-weight:bold; min-width:60%">PEMERINTAH KOTA INDONESIA</div>
+				<div style="float:left; margin-left:5px; font-size:1.9em; margin-top:0px; font-weight:bold; min-width:60%"><?php echo config_item('instansi'); ?></div>
 				<div style="float:left; margin-left:5px; font-size:0.89em; margin-top:3px; color:green;">Sistem Keterbukaan Informasi Pemerintah</div>
 			</div>
 			<div class="span6">
@@ -94,11 +94,12 @@ $theme = config_item('public_theme');
 				?>
 				<style>
 					.kip-left-content{
-						width: 680px;
+						width: 660px;
 						float:left;
 						background-color:white;
 						margin-top:10px;
 						margin-left:10px;
+						margin-right:20px;
 						border-radius:3px;
 					}
 					
@@ -134,7 +135,7 @@ $theme = config_item('public_theme');
 	<div class="footer">
 		<div class="center" style="max-width: 960px; margin:0px auto; font-size:11px; color:#777;">
 		<hr class="horlines"/>
-		Copyright 2013 &copy; Pemerintah Kota Indonesia
+		Copyright 2013 &copy; <?php echo ucwords(strtolower(config_item('instansi'))); ?>
 		</div>
 	 </div>
 	 <br/>
@@ -154,20 +155,14 @@ $theme = config_item('public_theme');
 	<script src="<?php echo $theme; ?>js/kip.js"></script>
 	<script src="<?php echo $theme; ?>js/pagination.js"></script>
 	
-	<script src="<?php echo $root_path; ?>js/highcharts.js"></script>
-	<script src="<?php echo $root_path; ?>js/exporting.js"></script>
+	<!--script src="<?php echo $root_path; ?>js/highcharts.js"></script>
+	<script src="<?php echo $root_path; ?>js/exporting.js"></script-->
 	
 	<script>
 		$('.bt-home').click(function(x){
 			var btn = $(this);
 			btn.parent().children('.btn').removeClass('active');
 			btn.addClass('active');
-			
-			//var url = 'inline/'+this.name;
-			//var get = $.get(url);
-			//get.done(function(data){
-				//$('#content').html(data);
-			//});
 		});
 	</script>
 </body>
