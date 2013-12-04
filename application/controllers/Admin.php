@@ -25,7 +25,7 @@ class admin extends KIP_Controller {
 	function profil(){
 		$this->load->model('mod_user/data_user');
 		
-		$id_user = 14;
+		$id_user = 1;
 		$tmp['user'] = $this->data_user->get($id_user);
 		
 		$data['content'] = $this->load->view('mod_user/view_profil',$tmp,true);
@@ -153,6 +153,14 @@ class admin extends KIP_Controller {
 		$tmp['config'] = $this->data_config->get_all('input');
 		$data['content'] = $this->load->view('mod_config/view_config',$tmp,true);
 		
+		$this->load->view($this->template,$data);
+	}
+	
+	function pengguna(){
+		$this->load->model('mod_user/data_user');
+		
+		$tmp['users'] = $this->data_user->get_all();
+		$data['content'] = $this->load->view('mod_user/view_user',$tmp,true);
 		$this->load->view($this->template,$data);
 	}
 	

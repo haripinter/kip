@@ -19,27 +19,27 @@
 					<tbody>
 						<tr>
 							<td>Nama Lengkap</td>
-							<td><?php echo $user['user_fullname']; ?></td>
+							<td><?php echo @$user['user_fullname']; ?></td>
 						</tr>
 						<tr>
 							<td>Alamat</td>
-							<td><?php echo $user['user_address']; ?></td>
+							<td><?php echo @$user['user_address']; ?></td>
 						</tr>
 						<tr>
 							<td>Nomor Telepon</td>
-							<td><?php echo $user['user_phone']; ?></td>
+							<td><?php echo @$user['user_phone']; ?></td>
 						</tr>
 						<tr>
 							<td>Nomor KTP</td>
-							<td><?php echo $user['user_ktp']; ?></td>
+							<td><?php echo @$user['user_ktp']; ?></td>
 						</tr>
 						<tr>
 							<td>Email</td>
-							<td><?php echo $user['user_email']; ?></td>
+							<td><?php echo @$user['user_email']; ?></td>
 						</tr>
 						<tr>
 							<td>Lampirkan KTP</td>
-							<td><?php echo $user['user_scanktp']; ?></td>
+							<td><?php echo @$user['user_scanktp']; ?></td>
 						</tr>
 					</tbody>
 				</table> 
