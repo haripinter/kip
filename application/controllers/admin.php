@@ -159,6 +159,7 @@ class admin extends KIP_Controller {
 	function pengguna(){
 		$this->load->model('mod_user/data_user');
 		
+		
 		$tmp['users'] = $this->data_user->get_all();
 		$data['content'] = $this->load->view('mod_user/view_user',$tmp,true);
 		$this->load->view($this->template,$data);
