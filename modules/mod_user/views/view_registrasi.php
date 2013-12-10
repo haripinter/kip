@@ -32,6 +32,9 @@ switch(@$result['err']){
 				<input type="text" name="kode" style="margin-bottom:0px" placeholder="Kode Aktivasi">
 				<button type="submit" class="btn btn-success" name="aktivasi" value="aktifkan">Aktifkan</button>
 			</form>
+			<!--br/>
+			Atau Anda bisa minta kode aktivasi baru di <a>SINI</a!-->
+		</form>
 		<?php
 		break;
 	
@@ -43,7 +46,7 @@ switch(@$result['err']){
 		
 	case 'double_banned':
 		?>
-			Mohon maaf, user dari email yang Anda masukkan telah di-banned. Mohon hubungi Administrator untuk mengaktifkan kembali user Anda.
+			Mohon maaf, user dari email yang Anda masukkan telah dibekukan. Mohon hubungi Administrator untuk mengaktifkan kembali user Anda.
 		<?php
 		break;
 		

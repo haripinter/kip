@@ -26,4 +26,29 @@ class data_config extends CI_Model {
 		$this->mysql->query("UPDATE dinamic_config SET config_value='".$config['value']."' WHERE config_key='".$config['key']."'");
 		return $this->get($config['key']);
 	}
+	
+	function list_theme($mode='public'){
+		$path = config_item('base_public_skin');
+		if($mode=='admin'){
+			$path = config_item('base_admin_skin');
+		}
+		
+		$list = scandir($path);
+		$tmps = array();
+		foreach($list as $file){
+			if($file!='.' && $file!='..'){
+				array_push($tmps,$file);
+			}
+		}
+		return $tmps;
+	}
+	
+	function active_theme($mode='public'){
+		$skin = $this->get('skin_frontpage');
+		if($mode=='admin'){
+			$skin = $this->get('skin_admin');
+		}
+		$data = ($skin['config_value']!='')? $skin['config_value'] : $skin['config_default'];
+		return $data;
+	}
 }

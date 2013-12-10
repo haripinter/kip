@@ -7,6 +7,7 @@ class KIP_Controller extends CI_Controller {
 		
 		$this->load->model('mod_config/data_config');
 		$this->load->model('mod_menu/data_menu');
+		$this->load->model('mod_berita/data_berita');
 		
 		$conf = $this->data_config->get_all();
 		foreach($conf as $conf){
@@ -18,6 +19,17 @@ class KIP_Controller extends CI_Controller {
 		
 		$this->config->set_item('admin_menu',$this->data_menu->get_all('admin'));
 		$this->config->set_item('public_menu',$this->data_menu->get_all('public'));
+		
+		//$form_login = $this->load->view("mod_user/view_login_form.php",null,true);
+		//$this->config->set_item('form_login',$form_login);
+		
+		$this->config->set_item('base_admin_skin',APPPATH.'../skins/admin/');
+		$this->config->set_item('base_public_skin',APPPATH.'../skins/frontpage/');
+		
+		$this->config->set_item('marquee',$this->data_berita->get_marquee());
+		
+		$login = (@$this->session->userdata('LOGIN'))? true : false;
+		$this->config->set_item('IS_LOGIN',$login);
 	}
 }
 ?>

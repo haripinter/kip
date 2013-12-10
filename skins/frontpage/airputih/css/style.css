@@ -34,27 +34,6 @@ body{
 	padding-left: 2%;
 }
 
-.mandiri{
-	/*background: url('../img/logo2.gif') repeat-x scroll 0 0 transparent;*/
-	width:137px;
-	height:40px;
-	float:right;
-	margin-top: 1.1%;
-	/**margin-top:-4em;*/
-	/*margin-bottom: -20em;*/
-}
-
-.ecermat{
-	/*background: url('../img/logo3.png') no-repeat scroll 0 0 transparent;*/
-	width:253px;
-	height:100px;
-	float:left;
-	margin-left: 22px;
-	margin-top: -40px;
-	/**margin-top:-4em;*/
-	/*margin-bottom: -20em;*/
-}
-
 .menuku{
 	margin-left:0px;
 	margin-right:0px;
@@ -138,7 +117,7 @@ body{
 }
 
 .loading{
-	/*background-image: url("../img/ajax-loaders/ajax-loader-1.gif");*/
+	background-image: url("../home-airputih/img/ajax-loaders/ajax-loader-1.gif");
 	background-repeat: no-repeat;
 	background-position: center center;
 	height: 15px;
@@ -146,7 +125,7 @@ body{
 }
 
 .spinner{
-	/*background-image: url("../img/spin.gif");*/
+	background-image: url("../home-airputih/img/spin.gif");
 	background-repeat: no-repeat;
 	background-position: center center;
 	height: 15px;

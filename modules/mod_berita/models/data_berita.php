@@ -1,19 +1,53 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class data_berita extends CI_Model{
-	// Ambil berita tertentu
+	// Ambil berita tertentu untuk admin
 	function get($berita_id){
 		$sql = "SELECT * FROM dinamic_posts WHERE ISNULL(post_static) AND post_id=".$berita_id;
 		$data = $this->mysql->get_data($sql,'clean');
 		return $data;
 	}
 	
-	// Ambil daftar berita
+	// Ambil daftar berita untuk admin
 	// order string 'id'|'created'|'modified'
 	// request_order string 'desc'|'asc'
 	// limit int
 	function get_all($order='',$request_order='ASC',$limit=0){
 		$sql = "SELECT * FROM dinamic_posts WHERE ISNULL(post_static)";
+		if($request_order=='DESC'){
+			$request_order = 'DESC';
+		}else{
+			$request_order = 'ASC';
+		}
+		
+		if($order=='id'){
+			$sql .= ' ORDER BY post_id '.$request_order;
+		}else if($order=='created'){
+			$sql .= ' ORDER BY post_start '.$request_order;
+		}else if($order=='modified'){
+			$sql .= ' ORDER BY post_updated '.$request_order;
+		}
+		
+		if(is_numeric($limit) && $limit>0){
+			$sql .= 'LIMIT '.$limit;
+		}
+		$data = $this->mysql->get_datas($sql,'clean');
+		return $data;
+	}
+	
+	// Ambil berita tertentu untuk frontsite
+	function get_berita($berita_id){
+		$sql = "SELECT * FROM dinamic_posts WHERE ISNULL(post_static) AND NOW()>=post_start AND NOW()<post_stop AND post_id=".$berita_id;
+		$data = $this->mysql->get_data($sql,'clean');
+		return $data;
+	}
+	
+	// Ambil daftar berita untuk frontsite
+	// order string 'id'|'created'|'modified'
+	// request_order string 'desc'|'asc'
+	// limit int
+	function get_berita_all($order='',$request_order='ASC',$limit=0){
+		$sql = "SELECT * FROM dinamic_posts WHERE ISNULL(post_static) AND NOW()>=post_start AND NOW()<post_stop ";
 		if($request_order=='DESC'){
 			$request_order = 'DESC';
 		}else{
@@ -60,8 +94,8 @@ class data_berita extends CI_Model{
 	function map($id,$limit=3){
 		$data = array();
 		$current = $this->get($id);
-		$before = $this->mysql->get_datas("SELECT * FROM dinamic_posts WHERE post_start<'".$current['post_start']."' ORDER BY post_start DESC LIMIT ".$limit,'clean');
-		$after = $this->mysql->get_datas("SELECT * FROM dinamic_posts WHERE post_start>'".$current['post_start']."' ORDER BY post_start ASC LIMIT ".$limit,'clean');
+		$before = $this->mysql->get_datas("SELECT * FROM dinamic_posts WHERE post_start<'".$current['post_start']."' AND NOW()>=post_start AND NOW()<post_stop ORDER BY post_start DESC LIMIT ".$limit,'clean');
+		$after = $this->mysql->get_datas("SELECT * FROM dinamic_posts WHERE post_start>'".$current['post_start']."' AND NOW()>=post_start AND NOW()<post_stop ORDER BY post_start ASC LIMIT ".$limit,'clean');
 		
 		foreach($before as $d){
 			array_push($data,$d);
@@ -70,6 +104,12 @@ class data_berita extends CI_Model{
 		foreach($after as $d){
 			array_push($data,$d);
 		}
+		return $data;
+	}
+	
+	function get_marquee(){
+		$sql  = "SELECT post_id as id,post_title as title FROM dinamic_posts WHERE post_marquee='on' AND NOW()>=post_start AND NOW()<post_stop AND post_static IS NULL ORDER BY post_created";
+		$data = $this->mysql->get_datas($sql,'clean');
 		return $data;
 	}
 }

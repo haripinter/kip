@@ -30,9 +30,23 @@
 			<img src="<?php echo site_url(); ?>/media/mekanisme.jpg">
 	</div>
 	<div class="span4">
-	Peta Situs
-	
-
-
+		<style>
+			.kip-right-home{
+				margin-bottom: 15px;
+			}
+			.kip-right-home h3{
+				font-weight: normal;
+			}
+		</style>
+		
+		<div class="kip-right-home">
+			<h3>PETA SITUS</h3>
+		</div>
+		
+		<div class="kip-right-home">
+			<?php
+			//echo config_item('form_login');
+			?>
+		</div>
 	</div>
 </div>

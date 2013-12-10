@@ -3,10 +3,13 @@
 class frontsite extends KIP_Controller {
 
 	var $template = 'frontpage_template';
+	var $ID_USER = 0;
+	var $IS_LOGIN = false;
 	
 	public function __construct(){
 		parent::__construct();
-		
+		$this->ID_USER = intval($this->session->userdata('ID'));
+		$this->IS_LOGIN = (@$this->session->userdata('LOGIN'))? true : false;
 	}
 	
 	public function index(){
@@ -23,12 +26,12 @@ class frontsite extends KIP_Controller {
 		
 		$id = intval($id);
 		if($id>0){
-			$tmp['berita'] = $this->data_berita->get($id);
+			$tmp['berita'] = $this->data_berita->get_berita($id);
 			$tmp['map'] = $this->data_berita->map($id);
 			$data['content'] = $this->load->view('mod_berita/front_detail',$tmp,true);
 			$data['page_type'] = 'semua_berita';
 		}else{
-			$tmp['berita'] = $this->data_berita->get_all('created','DESC');
+			$tmp['berita'] = $this->data_berita->get_berita_all('created','DESC');
 			$data['content'] = $this->load->view('mod_berita/front_list',$tmp,true);
 			$data['page_type'] = 'detail_berita';
 		}
@@ -63,8 +66,6 @@ class frontsite extends KIP_Controller {
 				$tmp['scanktp'] = (isset($_FILES['lampiran']))? $_FILES['lampiran'] : '';
 				
 				$go = true;
-				// periksa captcha
-				//if()
 				
 				if($tmp['email']=='' || $tmp['fullname']=='' || $tmp['address']=='' || $tmp['phone']=='' || $tmp['ktp']=='' || $tmp['scanktp']['size']==0 ){
 					$go = false;
@@ -187,11 +188,14 @@ class frontsite extends KIP_Controller {
 	}
 	
 	function permohonan($view=null,$id=null){
+		$this->must_login();
+		
+		
 		$this->load->model('mod_permohonan/data_permohonan');
 		$this->load->model('mod_user/data_user');
 		
 		$data = array();
-		$id_user = 2;
+		$id_user = $this->ID_USER;
 		
 		if(isset($_POST['permohonan'])){
 			if($_POST['permohonan']=='simpan'){
@@ -293,15 +297,17 @@ class frontsite extends KIP_Controller {
 	}
 	
 	function pengaduan($view=null,$id=null){
+		$this->must_login();
+		
 		$this->load->model('mod_pengaduan/data_pengaduan');
 		$this->load->model('mod_permohonan/data_permohonan');
 		$this->load->model('mod_user/data_user');
 		
 		$data = array();
-		$id_user = 2;
+		$id_user = $this->ID_USER;
 		
-		$id_request = 5;
-		$tmp['complain'] = $this->data_permohonan->get($id_request);
+		//$id_request = 5;
+		//$tmp['complain'] = $this->data_permohonan->get($id_request);
 		$tmp['alasan_pengaduan'] = $this->data_pengaduan->alasan_pengaduan();
 		$tmp['status_default'] = $this->data_pengaduan->status('active');
 		
@@ -396,6 +402,22 @@ class frontsite extends KIP_Controller {
 		}
 		$data['page_type'] = 'pengaduan';
 		$this->load->view($this->template,$data);
+	}
+	
+	function login(){
+		$data['page_type'] = 'login';
+		$data['content'] = $this->load->view('mod_user/view_login',null,true);
+		$this->load->view($this->template,$data);
+	}
+	
+	function logout(){
+		redirect('mod_user/logout');
+	}
+	
+	private function must_login(){
+		if(!$this->IS_LOGIN){
+			redirect('login');
+		}
 	}
 }
 

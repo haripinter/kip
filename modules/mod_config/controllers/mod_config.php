@@ -18,6 +18,7 @@ class mod_config extends KIP_Controller {
 			case 'save':
 				$data['situs'] = to_data(@$_POST['situs']);
 				$data['instansi'] = to_data(@$_POST['instansi']);
+				$data['deskripsi'] = to_data(@$_POST['deskripsi']);
 				$data['alamat'] = to_data(@$_POST['alamat']);
 				$data['telp'] = to_data(@$_POST['telp']);
 				$data['email'] = to_data(@$_POST['email']);
@@ -29,6 +30,27 @@ class mod_config extends KIP_Controller {
 				}
 				
 				echo json_encode(array('status'=>'success'));
+				
+				break;
+				
+			case 'change_theme':
+				$mode = to_data($_POST['mode']);
+				$tema = to_data($_POST['tema']);
+				
+				$tmp = array();
+				if($mode=='admin'){
+					$tmp['key'] = 'skin_admin';
+					$tmp['value'] = $tema;
+				}else{
+					$tmp['key'] = 'skin_frontpage';
+					$tmp['value'] = $tema;
+				}
+				$data = $this->data_config->update($tmp);
+				if($data['config_value']==$tema){
+					echo json_encode(array('status'=>'success','theme'=>$data['config_value']));
+				}else{
+					echo json_encode(array('status'=>'error'));
+				}
 				
 				break;
 		}

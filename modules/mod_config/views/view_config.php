@@ -47,6 +47,11 @@ $popup_action = site_url().'shot-config';
 						<td><textarea name="instansi" class="span12"><?php echo $config['instansi']; ?></textarea></td>
 					</tr>
 					<tr>
+						<td width="100px">Deskripsi</td>
+						<td width="5px">:</td>
+						<td><textarea name="deskripsi" class="span12"><?php echo $config['deskripsi']; ?></textarea></td>
+					</tr>
+					<tr>
 						<td>Alamat</td>
 						<td>:</td>
 						<td><textarea name="alamat" class="span12"><?php echo $config['alamat']; ?></textarea></td>
@@ -62,7 +67,7 @@ $popup_action = site_url().'shot-config';
 						<td><input name="email" type="text" class="span12" value="<?php echo $config['email']; ?>"></td>
 					</tr>
 					<tr>
-						<td>&bbsp;</td>
+						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						<td><a class="btn bt-save-web pull-left">Simpan</a><span class="span-result pull-left"></span></td>
 					</tr>
@@ -80,9 +85,42 @@ $popup_action = site_url().'shot-config';
 			<table class="table-form">
 				<tbody>
 					<tr>
-						<td width="150px">Tema Halaman Utama</td>
+						<td width="150px">Tema Web Utama</td>
 						<td width="5px">:</td>
-						<td><input type="text" class="span12"></td>
+						<td>
+							<div class="btn-group bt-change-theme">
+								<button class="btn bt-label-theme"><?php echo $public_theme_active; ?></button>
+								<button data-toggle="dropdown" class="btn dropdown-toggle"><span class="caret"></span></button>
+								<ul class="dropdown-menu">
+									<?php
+									foreach($public_themes as $thm){
+										?>
+										<li><a href="#" mode="public" name="<?php echo $thm; ?>"><?php echo $thm; ?></a></li>
+										<?php
+									}
+									?>
+								</ul>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td width="150px">Tema Web Admin</td>
+						<td width="5px">:</td>
+						<td>
+							<div class="btn-group bt-change-theme">
+								<button class="btn bt-label-theme"><?php echo $admin_theme_active; ?></button>
+								<button data-toggle="dropdown" class="btn dropdown-toggle"><span class="caret"></span></button>
+								<ul class="dropdown-menu">
+									<?php
+									foreach($admin_themes as $thm){
+										?>
+										<li><a href="#" mode="admin" name="<?php echo $thm; ?>"><?php echo $thm; ?></a></li>
+										<?php
+									}
+									?>
+								</ul>
+							</div>
+						</td>
 					</tr>
 				</tbody>
 			</table>
@@ -107,6 +145,27 @@ $popup_action = site_url().'shot-config';
 					res.html('');
 				},
 				1000);
+			}
+		});
+	});
+	
+	$('.bt-change-theme .dropdown-menu li a').click(function(){
+		var buttn = $(this);
+		var label = buttn.parents('.bt-change-theme').find('.bt-label-theme');
+		var dfaul = label.html();
+		label.html('-');
+		
+		var theme = buttn.attr('name');
+		var modes = buttn.attr('mode');
+		var datas = {action:'change_theme', mode: modes, tema:theme};
+		var act = '<?php echo $popup_action; ?>';
+		var pos = $.post(act,datas);
+		pos.done(function(data){
+			data = $.parseJSON(data);
+			if(data['status']=='success'){
+				label.html(data['theme']);
+			}else{
+				label.html(dfaul);
 			}
 		});
 	});

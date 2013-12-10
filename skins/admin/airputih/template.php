@@ -61,10 +61,7 @@ $theme = config_item('admin_theme');
 						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu">
-						<!--li><a href="#">Profile</a></li>
-						<li class="divider"></li-->
-						<!--li><a href="login.html">Change Password</a></li-->
-						<li><a href="login_exec.php?what=logout">Logout</a></li>
+						<li><a href="<?php echo site_url().'logout'?>">Logout</a></li>
 					</ul>
 				</div>
 				<!-- user dropdown ends -->

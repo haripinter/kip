@@ -77,5 +77,11 @@ class data_user extends CI_Model{
 		}
 		return $data;
 	}
+	
+	function cek_login($user){
+		$sql  = "SELECT * FROM dinamic_users WHERE user_pass='".$user['pass']."' AND user_email='".$user['mail']."'";
+		$data = $this->mysql->get_data($sql,'clean');
+		return $data;
+	}
 }
 ?>

@@ -6,7 +6,6 @@ class admin extends KIP_Controller {
 	
 	public function __construct(){
 		parent::__construct();
-		
 	}
 
 	public function index(){
@@ -149,6 +148,11 @@ class admin extends KIP_Controller {
 	
 	function config(){
 		$this->load->model('mod_config/data_config');
+		
+		$tmp['admin_themes'] = $this->data_config->list_theme('admin');
+		$tmp['public_themes'] = $this->data_config->list_theme('public');
+		$tmp['admin_theme_active'] = $this->data_config->active_theme('admin');
+		$tmp['public_theme_active'] = $this->data_config->active_theme('public');
 		
 		$tmp['config'] = $this->data_config->get_all('input');
 		$data['content'] = $this->load->view('mod_config/view_config',$tmp,true);

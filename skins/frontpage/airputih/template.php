@@ -50,11 +50,17 @@ $theme = config_item('public_theme');
 				<div class="pull-left" style="margin-top:5px; font-size:11px">
 				<b>Alamat :</b> <span style="color:green"><?php echo config_item('alamat'); ?></span> 
 				| <b>Telp & Fax :</b> <span style="color:green"><?php echo config_item('telp'); ?></span> 
-				| <b>Email :</b> <span style="color:green"><?php echo config_item('email'); ?>d</span>
+				| <b>Email :</b> <span style="color:green"><?php echo config_item('email'); ?></span>
 				</div>
 				
 				<div class="pull-right" style="margin-top:5px; font-size:11px">
-					<a href="<?php echo site_url(); ?>login"><span class="icon-off"></span></a>
+					<?php
+					if(!config_item('IS_LOGIN')){
+						echo '<a href="'.site_url().'login">Login <span class="icon-off"></span></a>';
+					}else{
+						echo '<a href="'.site_url().'logout" style="text-decoration:blink; color:red;">Logout <span class="icon-off"></span></a>';
+					}
+					?>
 				</div>
 			</div>
 		</div>
@@ -64,7 +70,7 @@ $theme = config_item('public_theme');
 			<div class="span6">
 				<div style="float:left;"><img src="<?php echo $theme; ?>img/lambang.png" style="height:50px; margin-top:-8px"></img></div>
 				<div style="float:left; margin-left:5px; font-size:1.9em; margin-top:0px; font-weight:bold; min-width:60%"><?php echo config_item('instansi'); ?></div>
-				<div style="float:left; margin-left:5px; font-size:0.89em; margin-top:3px; color:green;">Sistem Keterbukaan Informasi Pemerintah</div>
+				<div style="float:left; margin-left:5px; font-size:0.89em; margin-top:3px; color:green;"><?php echo config_item('deskripsi'); ?></div>
 			</div>
 			<div class="span6">
 				<div id="ddtopmenubar" class="mattblackmenu btn-group pull-right" style="margin-top:0px">
@@ -86,11 +92,17 @@ $theme = config_item('public_theme');
 			</div>
 		</noscript>
 		
-		
 			<?php
-			if($page_type=='home'){
+		switch($page_type){
+			case 'home':
 				echo $content;
-			}else{
+				break;
+				
+			case 'login':
+				echo $content;
+				break;
+				
+			default:
 				?>
 				<style>
 					.kip-left-content{
@@ -122,31 +134,39 @@ $theme = config_item('public_theme');
 						?>
 					</div>
 					<div class="kip-right-content">
+						
 						<?php
 						include_once('layanan.php');
 						?>
 					</div>
 				</div>
 				<?php
-			}
-			?>
-		
+		}
+		?>
 	</div>
-	<div class="footer">
+	
+	<div class="footer" style="margin-bottom:50px">
 		<div class="center" style="max-width: 960px; margin:0px auto; font-size:11px; color:#777;">
 		<hr class="horlines"/>
-		Copyright 2013 &copy; <?php echo ucwords(strtolower(config_item('instansi'))); ?>
+		Copyright 2013 &copy; <?php echo config_item('instansi'); ?>
 		</div>
-	 </div>
-	 <br/>
-	 <br/>
-	 <br/>
+	</div>
 	
 	<div class="footerbox" style="background-color:#fff;">
 		<marquee>
-		Marquee marquee marquee marquee marquee marquee marquee marquee marquee marquee marquee marquee marquee marquee marquee marquee marquee marquee marquee
+		<?php
+			$marquee = config_item('marquee');
+			echo '>>';
+			foreach($marquee as $marq){
+				// $marq['id']
+				//echo "<a href='#'>".$marq['title']."</a>";
+				echo " ".$marq['title']." | ";
+			}
+		?>
 		</marquee>
 	</div>
+	
+	
 	
 	<script src="<?php echo $theme; ?>js/bootstrap.min.js"></script>
 	<script src="<?php echo $theme; ?>js/bootbox.min.js"></script>
@@ -154,9 +174,6 @@ $theme = config_item('public_theme');
 	<script src="<?php echo $theme; ?>js/jquery.cleditor.min.js"></script>
 	<script src="<?php echo $theme; ?>js/kip.js"></script>
 	<script src="<?php echo $theme; ?>js/pagination.js"></script>
-	
-	<!--script src="<?php echo $root_path; ?>js/highcharts.js"></script>
-	<script src="<?php echo $root_path; ?>js/exporting.js"></script-->
 	
 	<script>
 		$('.bt-home').click(function(x){
