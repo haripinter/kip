@@ -19,11 +19,17 @@ class mod_user extends KIP_Controller {
 							'ID'=> $data['user_id'],
 							'MAIL'=> $data['user_email'],
 							'NAME'=> $data['user_fullname'],
-							'GROUP'=> $data['user_group'],
+							'GROUP'=> $data['user_groupid'],
 							'LOGIN'=> true
 						);
 					$this->session->set_userdata($new);
-					echo json_encode(array('status'=>'success'));
+					$new['status'] = 'success';
+					if($data['user_id']==1){
+						$new['next'] = 'admin';
+					}else{
+						$new['next'] = 'user';
+					}
+					echo json_encode($new);
 				}else{
 					echo json_encode(array('status'=>'failed'));
 				}

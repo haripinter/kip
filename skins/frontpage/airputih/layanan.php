@@ -47,7 +47,7 @@
 					Pengajuan pengaduan apabila permintaan informasi ditolak.
 				</td>
 			</tr>
-			<tr>
+			<!--tr>
 				<td colspan="2">&nbsp;</td>
 			</tr>
 			<tr>
@@ -58,7 +58,7 @@
 					<a href="<?php echo site_url();?>status"><h4><b>Status</b></h4></a>
 					Status permohonan yang diajukan oleh pengguna.
 				</td>
-			</tr>
+			</tr-->
 		</tbody>
 	</table>
 </div>

@@ -55,7 +55,7 @@ $route['pengaduan'] = "frontsite/pengaduan";
 $route['pengaduan/(:any)'] = "frontsite/pengaduan/$1";
 $route['login'] = "frontsite/login";
 $route['logout'] = "frontsite/logout";
-
+$route['berita'] = "frontsite/berita";
 $route['berita/(:any)/(:any).html'] = "frontsite/berita/$1/$2";
 $route['page/(:any)'] = "frontsite/halaman/$1";
 $route['(:any).html'] = "frontsite/$1";
