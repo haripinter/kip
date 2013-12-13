@@ -12,7 +12,15 @@ class data_menu extends CI_Model{
 	
 	// Ambil daftar menu dalam bentuk object
 	function get_menu($type='public',$parent=0,$level=-1){
-		$query = "SELECT * FROM dinamic_menus WHERE menu_type='".$type."' AND menu_parent=".$parent." ORDER BY menu_order";
+		$query = '';
+		$perm  = $this->LEVEL;
+		$user  = $this->ID_USER;
+		if((string)$perm=='root'){
+			$query = "SELECT * FROM dinamic_menus WHERE menu_type='".$type."' AND menu_parent=".$parent." ORDER BY menu_order";
+		}else{
+			$query = "SELECT * FROM dinamic_users,dinamic_userslevel,dinamic_userslevel_perm,dinamic_menus WHERE user_level=CAST(level_id AS CHAR(10)) AND perm_levelid=level_id AND menu_id=perm_menuid AND perm_grant='1' AND user_id=".$user." AND menu_type='".$type."' AND menu_parent=".$parent." ORDER BY menu_order";
+		}
+		
 		$datas = $this->mysql->get_datas($query);
 		$level++;
 		$child = array();
@@ -34,6 +42,10 @@ class data_menu extends CI_Model{
 			$this->list_menu($childMenu,&$data);
 		}
 		return $data;
+	}
+	
+	function aa(){
+		return $this->ID_USER;
 	}
 	
 	// get all data by type and format

@@ -21,7 +21,7 @@ class mod_user extends KIP_Controller {
 						);
 					$this->session->set_userdata($new);
 					$new['status'] = 'success';
-					if($data['user_id']==1){
+					if((string)$data['user_level']=='root' || $data['user_level'] > 0){
 						$new['next'] = 'admin';
 					}else{
 						$new['next'] = 'user';

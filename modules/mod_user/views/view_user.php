@@ -60,14 +60,16 @@ $popup_action = site_url().'shot-user';
 					$n = 1;
 					foreach($users as $user){
 						$id = $user['user_id'];
-						$nama = $user['user_fullname'];
-						$email = $user['user_email'];
-						$alamat = $user['user_address'];
-						$status = Status($id,$user['user_status']);
+						$nama = @$user['user_fullname'];
+						$email = @$user['user_email'];
+						$level = @$user['level_name'];
+						$alamat = @$user['user_address'];
+						$status = Status($id,intval(@$user['user_status']));
 						?>
 						<tr>
 							<td><center><?php echo $n; ?></center><span class="rowstbl<?php echo $id; ?>"></span></td>
 							<td><?php echo $email; ?></td>
+							<td><?php echo $level; ?></td>
 							<td><?php echo $nama; ?></td>
 							<td><?php echo $alamat; ?></td>
 							<td><?php echo $status; ?>

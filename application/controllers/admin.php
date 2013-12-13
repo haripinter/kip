@@ -6,8 +6,19 @@ class admin extends KIP_Controller {
 	
 	public function __construct(){
 		parent::__construct();
-		//$this->allowed('root');
-		//$this->must_login('root');
+		
+		$uri = '';
+		$n   = $this->uri->total_segments();
+		for($a=0; $a<=$n; $a++){
+			$uri .= $this->uri->segment($a);
+		}
+		$this->load->model('mod_userlevel/data_userlevel');
+		if((string)$this->LEVEL!='root'){
+			$tr = $this->data_userlevel->get_user_permission($this->ID_USER,$uri);
+			if(!$tr){
+				$this->restrict();
+			}
+		}
 	}
 
 	public function index(){

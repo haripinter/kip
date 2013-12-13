@@ -3,13 +3,13 @@
 class data_user extends CI_Model{
 
 	function get($user_id){
-		$sql = "SELECT * FROM dinamic_users WHERE user_id=".$user_id;
+		$sql = "SELECT * FROM dinamic_users,dinamic_userslevel WHERE CAST(level_id AS CHAR(10))=user_level AND user_id=".$user_id;
 		$data = $this->mysql->get_data($sql,'clean');
 		return $data;
 	}
 	
 	function get_all($order='',$request_order='ASC',$limit=0){
-		$sql = "SELECT * FROM dinamic_users WHERE user_id!=1 ";
+		$sql = "SELECT * FROM dinamic_users,dinamic_userslevel WHERE CAST(level_id AS CHAR(10))=user_level AND user_id!=1 ";
 		if($request_order=='DESC'){
 			$request_order = 'DESC';
 		}else{
@@ -36,7 +36,7 @@ class data_user extends CI_Model{
 			
 		}else{
 			$maxid = $this->mysql->get_maxid('user_id','dinamic_users');
-			$this->mysql->query("INSERT INTO dinamic_users(user_id,user_email,user_pass,user_fullname,user_address,user_phone,user_ktp,user_scanktp,user_registered,user_activationkey,user_status,user_expired_key) VALUES(".$maxid.",'".$user['email']."','".$user['pass']."','".$user['fullname']."','".$user['address']."','".$user['phone']."','".$user['ktp']."','".$user['scan']."',NOW(),'".$user['keys']."',0,(NOW()+INTERVAL 1 DAY))");
+			$this->mysql->query("INSERT INTO dinamic_users(user_id,user_email,user_level,user_pass,user_fullname,user_address,user_phone,user_ktp,user_scanktp,user_registered,user_activationkey,user_status,user_expired_key) VALUES(".$maxid.",'".$user['email']."','0','".$user['pass']."','".$user['fullname']."','".$user['address']."','".$user['phone']."','".$user['ktp']."','".$user['scan']."',NOW(),'".$user['keys']."',0,(NOW()+INTERVAL 1 DAY))");
 			$data = $this->get($maxid);
 			/*
 			user_status = 0 -> pending, 1 -> active, 2->banned;

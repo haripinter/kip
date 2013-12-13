@@ -4,14 +4,28 @@ class data_userlevel extends CI_Model{
 	
 	function get_level($level_id){
 		$data = array();
-		$sql = "SELECT * FROM dinamic_userslevel WHERE level_id=".$level_id;
+		$sql = "SELECT * FROM dinamic_userslevel WHERE level_id!=0 AND level_id=".$level_id;
 		$data = $this->mysql->get_data($sql,'clean');
 		
 		return $data;
 	}
 	
+	function get_user_permission($user_id,$segmen){
+		$sql  = "SELECT menu_link FROM dinamic_users,dinamic_userslevel,dinamic_userslevel_perm,dinamic_menus WHERE user_level=CAST(level_id AS CHAR(10)) AND perm_levelid=level_id AND menu_id=perm_menuid AND perm_grant='1' AND user_id=".$user_id;
+		$tmp  = $this->mysql->get_datas($sql,'clean');
+		$data = array();
+		foreach($tmp as $tm){
+			$x = strtolower(str_replace('/','',$tm['menu_link']));
+			array_push($data,$x);
+		}
+		if(!in_array($segmen,$data)){
+			return false;
+		}
+		return true;
+	}
+	
 	function get_all_level($order='',$request_order='ASC',$limit=0){
-		$sql = "SELECT * FROM dinamic_userslevel ";
+		$sql = "SELECT * FROM dinamic_userslevel WHERE level_id!=0 ";
 		if($request_order=='DESC'){
 			$request_order = 'DESC';
 		}else{
@@ -32,7 +46,7 @@ class data_userlevel extends CI_Model{
 	}
 	
 	function delete_level($level_id){
-		$this->mysql->query("DELETE FROM dinamic_userslevel WHERE level_id=".$level_id);
+		$this->mysql->query("DELETE FROM dinamic_userslevel WHERE level_id!=0 AND level_id=".$level_id);
 		return $this->get_level($level_id);
 	}
 	
