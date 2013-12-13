@@ -3,9 +3,8 @@
 class mod_polling extends KIP_Controller {
 
 	public function index(){
+		$this->allowed();
 		$this->load->model('data_polling');
-		
-		$id_user = 1;
 		
 		$action = to_data(@$_POST['action']);
 		switch($action){

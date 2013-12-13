@@ -9,7 +9,7 @@ class data_user extends CI_Model{
 	}
 	
 	function get_all($order='',$request_order='ASC',$limit=0){
-		$sql = "SELECT * FROM dinamic_users";
+		$sql = "SELECT * FROM dinamic_users WHERE user_id!=1 ";
 		if($request_order=='DESC'){
 			$request_order = 'DESC';
 		}else{
@@ -79,9 +79,15 @@ class data_user extends CI_Model{
 	}
 	
 	function cek_login($user){
-		$sql  = "SELECT * FROM dinamic_users WHERE user_pass='".$user['pass']."' AND user_email='".$user['mail']."'";
+		$sql  = "SELECT * FROM dinamic_users WHERE user_pass='".$user['pass']."' AND user_status=1 AND user_email='".$user['mail']."'";
 		$data = $this->mysql->get_data($sql,'clean');
 		return $data;
+	}
+	
+	function change_status($user){
+		$sql  = "UPDATE dinamic_users SET user_status=".$user['status']." WHERE user_id=".$user['id'];
+		$data = $this->mysql->query($sql);
+		return $this->get($user['id']);
 	}
 }
 ?>

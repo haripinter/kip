@@ -3,9 +3,10 @@
 class mod_dokumen extends KIP_Controller {
 
 	public function index(){
+		$this->allowed('root');
 		$this->load->model('data_dokumen');
 		
-		$id_user = 1;
+		$id_user = $this->session->userdata('id');
 		
 		$action = to_data(@$_POST['action']);	
 		switch($action){
@@ -99,14 +100,15 @@ class mod_dokumen extends KIP_Controller {
 		}
 	}
 	
-	function download($id){
+	function download($id=0){
 		$this->load->model('data_dokumen');
 		$id = intval($id);
 		
-		$id_user = 1;
-		
 		$media = $this->data_dokumen->get($id);
 		$folder = 'media/dokumen/';
+		
+		if(@$media['media_realname']=='') exit();
+		
 		$file = $folder.$media['media_realname'];
 		
 		if(file_exists(urldecode($file))) {

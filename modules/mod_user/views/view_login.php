@@ -62,10 +62,34 @@ if(!config_item('IS_LOGIN')){
 ?>
 	<div class="row-fluid" style="border-radius:3px; background-color:#fff; padding-top:10px; margin-top:8px;">
 		<div class="box-content" style="padding:20px; margin-top:">
-			<div class="box center" style="width:250px; margin-bottom:80px; margin-top:70px">
+			<div class="box center" style="width:450px; margin-bottom:80px; margin-top:70px">
 				<div class="box-content">
-					<div class="row-fluid">
-						Selamat Datang 23.22
+					<div class="row-fluid" style="text-align:left">
+						<h3>Informasi User :</h3>
+						<hr style="margin:2px"/>
+						<table>
+							<tbody>
+							  <tr>
+								<td valign="top" width="70px">IP Adress</td>
+								<td valign="top">:</td>
+								<td valign="top"><?php echo $userdata['ip_address']; ?></td>
+							  </tr>
+							  <tr>
+								<td valign="top">Browser</td>
+								<td valign="top">:</td>
+								<td valign="top"><?php echo $userdata['user_agent']; ?></td>
+							  </tr>
+							  <tr>
+								<td valign="top">Nama</td>
+								<td valign="top">:</td>
+								<td valign="top"><?php echo $userdata['nama']; ?></td>
+							  </tr><tr>
+								<td valign="top">Alamat</td>
+								<td valign="top">:</td>
+								<td valign="top"><?php echo $userdata['alamat']; ?></td>
+							  </tr>
+							</tbody>
+						</table>
 					</div>                   
 				</div>
 			</div>

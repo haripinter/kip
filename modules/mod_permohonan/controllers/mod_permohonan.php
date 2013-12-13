@@ -3,9 +3,9 @@
 class mod_permohonan extends KIP_Controller {
 
 	public function index(){
+		$this->allowed();
 		$this->load->model('mod_permohonan/data_permohonan');
 		
-		$id_user = 2;
 		$action = to_data(@$_POST['action']);
 		switch($action){
 			case 'change_status':

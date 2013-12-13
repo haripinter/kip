@@ -8,8 +8,8 @@ class frontsite extends KIP_Controller {
 	
 	public function __construct(){
 		parent::__construct();
-		$this->ID_USER = intval($this->session->userdata('ID'));
-		$this->IS_LOGIN = (@$this->session->userdata('LOGIN'))? true : false;
+		$this->ID_USER = intval($this->session->userdata('id'));
+		$this->IS_LOGIN = (intval(@$this->session->userdata('id'))>0)? true : false;
 	}
 	
 	public function index(){
@@ -49,6 +49,8 @@ class frontsite extends KIP_Controller {
 	}
 	
 	function registrasi($action=null){
+		$this->must_logout();
+			
 		$this->load->model('mod_user/data_user');
 		
 		$tmp_data = array();
@@ -131,6 +133,8 @@ class frontsite extends KIP_Controller {
 	}
 	
 	function aktivasi($key=null){
+		$this->must_logout();
+		
 		$this->load->model('mod_user/data_user');
 		
 		$tmp_data = array();
@@ -406,7 +410,8 @@ class frontsite extends KIP_Controller {
 	
 	function login(){
 		$data['page_type'] = 'login';
-		$data['content'] = $this->load->view('mod_user/view_login',null,true);
+		$tmp['userdata'] = $this->session->all_userdata();
+		$data['content'] = $this->load->view('mod_user/view_login',$tmp,true);
 		$this->load->view($this->template,$data);
 	}
 	
@@ -416,6 +421,12 @@ class frontsite extends KIP_Controller {
 	
 	private function must_login(){
 		if(!$this->IS_LOGIN){
+			redirect('login');
+		}
+	}
+	
+	private function must_logout(){
+		if($this->IS_LOGIN){
 			redirect('login');
 		}
 	}

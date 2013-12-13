@@ -3,9 +3,10 @@
 class mod_slideshow extends KIP_Controller {
 
 	public function index(){
+		$this->allowed('root');
 		$this->load->model('data_slideshow');
 		
-		$id_user = 1;
+		$id_user = $this->session->userdata('id');
 		
 		$action = to_data(@$_POST['action']);
 		switch($action){

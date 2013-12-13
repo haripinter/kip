@@ -87,4 +87,12 @@ function randkey($length=11) {
 	return $key;
 }
 
+function status_user($s){
+	$status = array(
+				0 => 'BELUM AKTIVASI',
+				1 => 'AKTIF',
+				2 => 'DIBLOK'
+			);
+	return $status[$s];
+}
 ?>

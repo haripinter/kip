@@ -5,10 +5,7 @@ class mod_user extends KIP_Controller {
 	public function index(){
 		$this->load->model('data_user');
 		
-		$id_user = 1;
-		
 		$action = to_data(@$_POST['action']);
-		
 		switch($action){
 			case 'login':
 				$tmp['mail'] = to_data($_POST['email']);
@@ -16,11 +13,11 @@ class mod_user extends KIP_Controller {
 				$data = $this->data_user->cek_login($tmp);
 				if(intval(@$data['user_id'])>0){
 					$new = array(
-							'ID'=> $data['user_id'],
-							'MAIL'=> $data['user_email'],
-							'NAME'=> $data['user_fullname'],
-							'GROUP'=> $data['user_groupid'],
-							'LOGIN'=> true
+							'id'=> $data['user_id'],
+							'level'=> $data['user_level'],
+							'email'=> $data['user_email'],
+							'nama'=> $data['user_fullname'],
+							'alamat'=> $data['user_address']
 						);
 					$this->session->set_userdata($new);
 					$new['status'] = 'success';
@@ -35,15 +32,35 @@ class mod_user extends KIP_Controller {
 				}
 				
 				break;
+				
+			case 'change_status':
+				$this->allowed('root');
+				$tmp['id']    = intval($_POST['uid']);
+				$tmp['status'] = intval($_POST['status']);
+				$data = $this->data_user->change_status($tmp);
+				
+				$warna = array(
+						0 => 'btn-default',
+						1 => 'btn-success',
+						2 => 'btn-important'
+					);
+				
+				if(is_numeric(@$data['user_status'])){
+					echo json_encode(array('status'=>'success',
+									'status_user'=>status_user($data['user_status']),
+									'status_warna'=>$warna[$data['user_status']]));
+				}
+				
+				break;
 		}
 	}
 	
 	function logout(){
-		$this->session->unset_userdata('ID');
-		$this->session->unset_userdata('MAIL');
-		$this->session->unset_userdata('NAME');
-		$this->session->unset_userdata('GROUP');
-		$this->session->unset_userdata('LOGIN');
+		$this->session->unset_userdata('id');
+		$this->session->unset_userdata('level');
+		$this->session->unset_userdata('email');
+		$this->session->unset_userdata('nama');
+		$this->session->unset_userdata('alamat');
 		$this->session->sess_destroy();
 		redirect(site_url().'home');
 	}

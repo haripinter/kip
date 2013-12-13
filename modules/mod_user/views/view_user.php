@@ -19,8 +19,32 @@ function Bottons($id){
 	</div>';
 }
 
+function Status($id,$stat){
+	$warna = array(
+				0 => 'btn-default',
+				1 => 'btn-success',
+				2 => 'btn-important'
+			);
+	
+	$str = '<div class="btn-group bt-status-user">
+				<a class="btn '.$warna[$stat].' bt-status-label">'.status_user($stat).'</a>
+				<button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+				<ul class="dropdown-menu">
+						<li><a name="'.$id.'" status="0">'.status_user(0).'</a></li>
+						<li><a name="'.$id.'" status="1">'.status_user(1).'</a></li>
+						<li><a name="'.$id.'" status="2">'.status_user(2).'</a></li>
+				</ul>
+			</div>';
+	return $str;
+}
+
 $popup_action = site_url().'shot-user';
 ?>
+<style>
+	.bt-status-user{
+		cursor: pointer;
+	}
+</style>
 <div class="row-fluid sortable">
 	<div class="box span12">
 		<div class="box-header well" data-original-title>
@@ -33,7 +57,7 @@ $popup_action = site_url().'shot-user';
 					<th width="31px">Email</th>
 					<th>Nama</th>
 					<th>Alamat</th>
-					<th width="10px">Status</th>
+					<th width="180px">Status</th>
 					<th width="70px">&nbsp;</th>
 				</thead>
 				<tbody>
@@ -45,14 +69,14 @@ $popup_action = site_url().'shot-user';
 						$nama = $user['user_fullname'];
 						$email = $user['user_email'];
 						$alamat = $user['user_address'];
-						$status = $user['user_status'];
+						$status = Status($id,$user['user_status']);
 						?>
 						<tr>
 							<td><center><?php echo $n; ?></center><span class="rowstbl<?php echo $id; ?>"></span></td>
 							<td><?php echo $email; ?></td>
 							<td><?php echo $nama; ?></td>
 							<td><?php echo $alamat; ?></td>
-							<td><?php echo $status; ?></td>
+							<td><?php echo $status; ?>
 							<td><?php echo Bottons($id); ?></td>
 						</tr>
 						<?php
@@ -68,6 +92,27 @@ $popup_action = site_url().'shot-user';
 <input type="hidden" class="Bottons" value="<?php echo htmlspecialchars(Bottons(0));?>">
 <script>
 $(document).ready(function(){
+	
+	$('.bt-status-user ul li a').click(function(){
+		var link = $(this);
+		var labl = link.parents('.bt-status-user').find('.bt-status-label');
+		var spin = '<div><div class="spinner pull-left"></div>&nbsp;</div >';
+		labl.html(spin);
+		
+		var duid = link.attr('name');
+		var dsta = link.attr('status');
+		var data = {action:'change_status', uid: duid, status: dsta};
+		var urls = '<?php echo $popup_action; ?>';
+		var post = $.post(urls, data);
+		post.done(function(data){
+			data = $.parseJSON(data);
+			if(data['status']=='success'){
+				labl.html(data['status_user']);
+			}
+		});
+	});
+	
+	
 	$('.box-berita .nav-tabs li a').click(function(){
 		var sect = $($(this).attr('href'));
 		sect.addClass('active');

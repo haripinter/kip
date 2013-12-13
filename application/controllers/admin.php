@@ -3,9 +3,21 @@
 class admin extends KIP_Controller {
 	
 	var $template = 'admin_template';
+	var $ID_USER = 0;
+	var $IS_LOGIN = false;
 	
 	public function __construct(){
 		parent::__construct();
+		$this->ID_USER = intval($this->session->userdata('id'));
+		$this->IS_LOGIN = (intval(@$this->session->userdata('id'))>0)? true : false;
+		
+		$this->must_login();
+	}
+	
+	private function must_login(){
+		if(!$this->IS_LOGIN){
+			redirect('login');
+		}
 	}
 
 	public function index(){
@@ -21,7 +33,7 @@ class admin extends KIP_Controller {
 		$this->load->view($this->template,$data);
 	}
 	
-	function profil(){
+	/*function profil(){
 		$this->load->model('mod_user/data_user');
 		
 		$id_user = 1;
@@ -29,7 +41,7 @@ class admin extends KIP_Controller {
 		
 		$data['content'] = $this->load->view('mod_user/view_profil',$tmp,true);
 		$this->load->view($this->template,$data);
-	}
+	}*/
 	
 	function permohonan($view=null,$id=null){
 		$this->load->model('mod_permohonan/data_permohonan');
@@ -163,12 +175,10 @@ class admin extends KIP_Controller {
 	function pengguna(){
 		$this->load->model('mod_user/data_user');
 		
-		
 		$tmp['users'] = $this->data_user->get_all();
 		$data['content'] = $this->load->view('mod_user/view_user',$tmp,true);
 		$this->load->view($this->template,$data);
 	}
-	
 }
 
 ?>

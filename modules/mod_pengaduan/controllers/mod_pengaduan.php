@@ -3,13 +3,13 @@
 class mod_pengaduan extends KIP_Controller {
 
 	public function index(){
+		$this->allowed();
 		$this->load->model('mod_pengaduan/data_pengaduan');
 		$this->load->model('mod_permohonan/data_permohonan');
 		
-		$id_user = 2;
+		$id_user = $this->session->userdata('id');
 		
 		$action = to_data(@$_POST['action']);
-		
 		switch($action){
 			case 'get_references':
 				$tmp['request'] = $this->data_permohonan->get_by_user($id_user);

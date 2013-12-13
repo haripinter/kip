@@ -31,5 +31,24 @@ class KIP_Controller extends CI_Controller {
 		$login = (@$this->session->userdata('LOGIN'))? true : false;
 		$this->config->set_item('IS_LOGIN',$login);
 	}
+	
+	function allowed($user='all'){
+		$id = @$this->session->userdata['id'];
+		$level = @$this->session->userdata['level'];
+		switch($user){
+			case 'all':
+				if(!is_numeric($id) && intval($id)==0){
+					echo json_encode('.');
+					exit();
+				}
+				break;
+			case 'root':
+				if($level!='root'){
+					echo json_encode('_');
+					exit();
+				}
+				break;
+		}
+	}
 }
 ?>

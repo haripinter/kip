@@ -31,14 +31,6 @@ $popup_action = site_url().'shot-config';
 			<table class="table-form">
 				<tbody>
 					<tr>
-						<td colspan="3"><h3>Konfigurasi Dasar</h3></td>
-					</tr>
-					<tr>
-						<td>Alamat Website</td>
-						<td>:</td>
-						<td><input name="situs" type="text" class="span12" value="<?php echo $config['situs']; ?>"></td>
-					</tr>
-					<tr>
 						<td colspan="3"><h3>Informasi Instansi</h3></td>
 					</tr>
 					<tr>
@@ -65,6 +57,29 @@ $popup_action = site_url().'shot-config';
 						<td>Email</td>
 						<td>:</td>
 						<td><input name="email" type="text" class="span12" value="<?php echo $config['email']; ?>"></td>
+					</tr>
+					<tr>
+						<td colspan="3"><h3>Konfigurasi Dasar</h3></td>
+					</tr>
+					<tr>
+						<td>Alamat Website</td>
+						<td>:</td>
+						<td><input name="situs" type="text" class="span12" value="<?php echo $config['situs']; ?>"></td>
+					</tr>
+					<tr>
+						<td>Email Aktivasi</td>
+						<td>:</td>
+						<td><input name="mail_sender" type="text" class="span12" value="<?php echo $config['mail_sender']; ?>"></td>
+					</tr>
+					<tr>
+						<td>Nama Aplikasi</td>
+						<td>:</td>
+						<td><?php echo $config['app_name']; ?></td>
+					</tr>
+					<tr>
+						<td>Versi Aplikasi</td>
+						<td>:</td>
+						<td><?php echo $config['app_version']; ?></td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td>

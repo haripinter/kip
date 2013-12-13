@@ -1,21 +1,19 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 $theme = config_item('public_theme');
+
+$title = config_item('app_name').' '.config_item('app_version').' ~ '.config_item('instansi');
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>KIP v0.1 ~ Pemerintah Kota Indonesia</title>
+	<title><?php echo $title; ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="Sistem Keterbukaan Informasi Pemerintahan">
 	<meta name="author" content="haripinter">
 
-	<!--link href="<?php echo $theme; ?>css/bootstrap.min.css" id="bs-css" rel="stylesheet"-->
-	<link href="<?php echo $theme; ?>css/bootstrap-classic.css" id="bs-css" rel="stylesheet">
-	<link href="<?php echo $theme; ?>css/bootstrap-responsive.min.css" rel="stylesheet">
 	<link href="<?php echo $theme; ?>css/kip.css" rel="stylesheet">
 	<link href="<?php echo $theme; ?>css/style.css" rel="stylesheet">
-	<!--link href="<?php echo $theme; ?>css/menu.css" rel="stylesheet"-->
 	
 	<link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>css/ddlevelsmenu-base.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>css/ddlevelsmenu-topbar.css" />
@@ -93,56 +91,8 @@ $theme = config_item('public_theme');
 		</noscript>
 		
 			<?php
-		switch($page_type){
-			case 'home':
-				echo $content;
-				break;
-				
-			case 'login':
-				echo $content;
-				break;
-				
-			default:
-				?>
-				<style>
-					.kip-left-content{
-						width: 660px;
-						float:left;
-						background-color:white;
-						margin-top:10px;
-						margin-left:10px;
-						margin-right:20px;
-						border-radius:3px;
-					}
-					
-					.kip-left-content div{
-						margin-top: 0px !important;
-					}
-					
-					.kip-right-content{
-						margin-top: 10px;
-						margin-right:10px;
-						margin-left:10px;
-						width: 250px;
-						float:left;
-					}
-				</style>
-				<div class="row-fluid" style="background-color:white; border-radius:3px; margin-top:10px;">
-					<div class="kip-left-content">
-						<?php
-						echo $content;
-						?>
-					</div>
-					<div class="kip-right-content">
-						
-						<?php
-						include_once('layanan.php');
-						?>
-					</div>
-				</div>
-				<?php
-		}
-		?>
+			echo $content;
+			?>
 	</div>
 	
 	<div class="footer" style="margin-bottom:50px">
@@ -158,8 +108,6 @@ $theme = config_item('public_theme');
 			$marquee = config_item('marquee');
 			echo '>>';
 			foreach($marquee as $marq){
-				// $marq['id']
-				//echo "<a href='#'>".$marq['title']."</a>";
 				echo " ".$marq['title']." | ";
 			}
 		?>
@@ -168,12 +116,9 @@ $theme = config_item('public_theme');
 	
 	
 	
-	<script src="<?php echo $theme; ?>js/bootstrap.min.js"></script>
-	<script src="<?php echo $theme; ?>js/bootbox.min.js"></script>
 	<script src="<?php echo $theme; ?>js/jquery-ui.min.js"></script>
 	<script src="<?php echo $theme; ?>js/jquery.cleditor.min.js"></script>
 	<script src="<?php echo $theme; ?>js/kip.js"></script>
-	<script src="<?php echo $theme; ?>js/pagination.js"></script>
 	
 	<script>
 		$('.bt-home').click(function(x){

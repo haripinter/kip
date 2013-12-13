@@ -1,19 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class mod_config extends KIP_Controller {
-
-	/*public function __construct(){
-		parent::__construct();
-		$this->load->model('data_config');
-	}*/
 	
 	public function index(){
+		$this->allowed('root');
 		$this->load->model('data_config');
 		
-		$id_user = 1;
-		
 		$action = to_data(@$_POST['action']);
-		
 		switch($action){
 			case 'save':
 				$data['situs'] = to_data(@$_POST['situs']);
@@ -22,6 +15,7 @@ class mod_config extends KIP_Controller {
 				$data['alamat'] = to_data(@$_POST['alamat']);
 				$data['telp'] = to_data(@$_POST['telp']);
 				$data['email'] = to_data(@$_POST['email']);
+				$data['mail_sender'] = to_data(@$_POST['mail_sender']);
 				
 				foreach($data as $key=>$value){
 					$config['key'] = $key;

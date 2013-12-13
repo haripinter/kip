@@ -3,10 +3,11 @@
 class mod_tautan extends KIP_Controller {
 
 	public function index(){
+		$this->allowed('root');
 		$this->load->model('data_tautan');
 		$this->load->model('mod_dokumen/data_dokumen');
 		
-		$id_user = 1;
+		$id_user = $this->session->userdata('id');
 		
 		$action = to_data(@$_POST['action']);
 		switch($action){

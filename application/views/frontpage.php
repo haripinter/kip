@@ -1,4 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');?>
+
 <div class="row-fluid">
 	<div class="span12 box" style="padding:10px;">
 		<div id="myCarousel" class="carousel slide">
