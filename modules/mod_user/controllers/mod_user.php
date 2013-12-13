@@ -39,16 +39,11 @@ class mod_user extends KIP_Controller {
 				$tmp['status'] = intval($_POST['status']);
 				$data = $this->data_user->change_status($tmp);
 				
-				$warna = array(
-						0 => 'btn-default',
-						1 => 'btn-success',
-						2 => 'btn-important'
-					);
-				
 				if(is_numeric(@$data['user_status'])){
+					$status = $data['user_status'];
 					echo json_encode(array('status'=>'success',
-									'status_user'=>status_user($data['user_status']),
-									'status_warna'=>$warna[$data['user_status']]));
+									'status_user'=>status_user($status),
+									'status_warna'=>warna_status_user($status)));
 				}
 				
 				break;

@@ -95,4 +95,13 @@ function status_user($s){
 			);
 	return $status[$s];
 }
+
+function warna_status_user($w){
+	$warna = array(
+				0 => 'btn-default',
+				1 => 'btn-success',
+				2 => 'btn-danger'
+			);
+	return $warna[$w];
+}
 ?>

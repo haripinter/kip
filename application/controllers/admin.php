@@ -3,21 +3,11 @@
 class admin extends KIP_Controller {
 	
 	var $template = 'admin_template';
-	var $ID_USER = 0;
-	var $IS_LOGIN = false;
 	
 	public function __construct(){
 		parent::__construct();
-		$this->ID_USER = intval($this->session->userdata('id'));
-		$this->IS_LOGIN = (intval(@$this->session->userdata('id'))>0)? true : false;
-		
-		$this->must_login();
-	}
-	
-	private function must_login(){
-		if(!$this->IS_LOGIN){
-			redirect('login');
-		}
+		//$this->allowed('root');
+		//$this->must_login('root');
 	}
 
 	public function index(){

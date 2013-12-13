@@ -20,14 +20,8 @@ function Bottons($id){
 }
 
 function Status($id,$stat){
-	$warna = array(
-				0 => 'btn-default',
-				1 => 'btn-success',
-				2 => 'btn-important'
-			);
-	
 	$str = '<div class="btn-group bt-status-user">
-				<a class="btn '.$warna[$stat].' bt-status-label">'.status_user($stat).'</a>
+				<a class="btn '.warna_status_user($stat).' bt-status-label">'.status_user($stat).'</a>
 				<button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 				<ul class="dropdown-menu">
 						<li><a name="'.$id.'" status="0">'.status_user(0).'</a></li>
@@ -108,6 +102,7 @@ $(document).ready(function(){
 			data = $.parseJSON(data);
 			if(data['status']=='success'){
 				labl.html(data['status_user']);
+				labl.removeClass().addClass('btn '+data['status_warna']+' bt-status-label');
 			}
 		});
 	});

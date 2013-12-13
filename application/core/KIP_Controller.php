@@ -2,6 +2,9 @@
 
 class KIP_Controller extends CI_Controller {
 
+	var $ID_USER = 0;
+	var $IS_LOGIN = false;
+
     public function __construct(){
 		parent::__construct();
 		
@@ -28,8 +31,10 @@ class KIP_Controller extends CI_Controller {
 		
 		$this->config->set_item('marquee',$this->data_berita->get_marquee());
 		
-		$login = (@$this->session->userdata('LOGIN'))? true : false;
-		$this->config->set_item('IS_LOGIN',$login);
+		$this->ID_USER = intval($this->session->userdata('id'));
+		$this->IS_LOGIN = (intval(@$this->session->userdata('id'))>0)? true : false;
+		$this->config->set_item('ID_USER',$this->ID_USER);
+		$this->config->set_item('IS_LOGIN',$this->IS_LOGIN);
 	}
 	
 	function allowed($user='all'){
@@ -48,6 +53,31 @@ class KIP_Controller extends CI_Controller {
 					exit();
 				}
 				break;
+		}
+	}
+	
+	function must_login($user='all'){
+		$id = @$this->session->userdata['id'];
+		$level = @$this->session->userdata['level'];
+		switch($user){
+			case 'all':
+				if(!is_numeric($id) && intval($id)==0){
+					redirect('login');
+					exit();
+				}
+				break;
+			case 'root':
+				if($level!='root'){
+					redirect('login');
+					exit();
+				}
+				break;
+		}
+	}
+	
+	function must_logout(){
+		if($this->IS_LOGIN){
+			redirect('login');
 		}
 	}
 }

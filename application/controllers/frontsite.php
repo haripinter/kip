@@ -3,13 +3,9 @@
 class frontsite extends KIP_Controller {
 
 	var $template = 'frontpage_template';
-	var $ID_USER = 0;
-	var $IS_LOGIN = false;
 	
 	public function __construct(){
 		parent::__construct();
-		$this->ID_USER = intval($this->session->userdata('id'));
-		$this->IS_LOGIN = (intval(@$this->session->userdata('id'))>0)? true : false;
 	}
 	
 	public function index(){
@@ -417,18 +413,6 @@ class frontsite extends KIP_Controller {
 	
 	function logout(){
 		redirect('mod_user/logout');
-	}
-	
-	private function must_login(){
-		if(!$this->IS_LOGIN){
-			redirect('login');
-		}
-	}
-	
-	private function must_logout(){
-		if($this->IS_LOGIN){
-			redirect('login');
-		}
 	}
 }
 
