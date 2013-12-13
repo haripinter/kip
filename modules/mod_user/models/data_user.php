@@ -25,7 +25,7 @@ class data_user extends CI_Model{
 		if(is_numeric($limit) && $limit>0){
 			$sql .= 'LIMIT '.$limit;
 		}
-		$data = $this->mysql->get_datas($sql);
+		$data = $this->mysql->get_datas($sql,'clean');
 		return $data;
 	}
 	
@@ -52,7 +52,7 @@ class data_user extends CI_Model{
 	
 	function isdouble($email){
 		$sql = "SELECT * FROM dinamic_users WHERE user_email='".$email."'";
-		$data = $this->mysql->get_data($sql);
+		$data = $this->mysql->get_data($sql,'clean');
 		return $data;
 	}
 	
