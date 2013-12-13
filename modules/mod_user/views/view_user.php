@@ -49,6 +49,7 @@ $popup_action = site_url().'shot-user';
 				<thead>
 					<th width="1px">No.</th>
 					<th width="31px">Email</th>
+					<th>Level</th>
 					<th>Nama</th>
 					<th>Alamat</th>
 					<th width="180px">Status</th>
@@ -58,7 +59,6 @@ $popup_action = site_url().'shot-user';
 					<?php
 					$n = 1;
 					foreach($users as $user){
-						
 						$id = $user['user_id'];
 						$nama = $user['user_fullname'];
 						$email = $user['user_email'];

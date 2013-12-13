@@ -9,17 +9,33 @@ class mod_userlevel extends KIP_Controller {
 		$type   = to_data(@$_POST['type']);
 		$action = to_data(@$_POST['action']);	
 		switch($action){
-			case 'save':
-				$menu = array();
-				$menu['menu_id']     = intval(@$_POST['menu_id']);
-				$menu['menu_parent'] = intval(@$_POST['menu_parent']);
-				$menu['menu_type']   = to_data(@$_POST['menu_type']);
-				$menu['menu_icon']   = to_data(@$_POST['menu_icon']);
-				$menu['menu_title']  = to_data(@$_POST['menu_title']);
-				$menu['menu_link']   = to_data(@$_POST['menu_link']);
+			case 'save_level':
+				$lid = @$_POST['lid'];
+				$level = @$_POST['level'];
 				
-				$res = $this->data_menu->insert($menu);
+				for($a=0; $a<count($lid); $a++){
+					$lv['id'] = $lid[$a];
+					$lv['name'] = $level[$a];
+					$this->data_userlevel->insert($lv);
+				}
+				
+				$res['levels'] = $this->data_userlevel->get_all_level();
+				$res['status'] = 'success';
 				echo json_encode($res);
+				
+				break;
+				
+			case 'save_permission':
+				$menu = @$_POST['menuid'];
+				$level = @$_POST['levelid'];
+				$pilih = @$_POST['pilih'];
+				for($a=0; $a<count($menu); $a++){
+					$tmp['menu_id'] = intval(@$menu[$a]);
+					$tmp['level_id'] = intval(@$level[$a]);
+					$tmp['grant'] = intval(@$pilih[$tmp['menu_id']][$tmp['level_id']]);
+					$this->data_userlevel->change_permission($tmp);
+				}
+				echo json_encode(array('status'=>'success'));
 				
 				break;
 			

@@ -22,14 +22,18 @@ $popup_action = site_url().'shot-userlevel';
 <div class="row-fluid sortable">
 	<div class="box span5">
 		<div class="box-header well" data-original-title>
-			<h2><i class="icon-picture"></i> LEVEL PENGGUNA</h2>
+			<h2><i class="icon-picture"></i> LEVEL ADMIN</h2>
 		</div>
 		<div class="box-berita" style="padding:10px">
+		  <form class="form-level">
+		    <input type="hidden" name="action" value="save_level">
 			<table class="table">
 				<thead>
-					<th width="1px">No.</th>
-					<th>Level</th>
-					<th width="70px">&nbsp;</th>
+					<tr>
+						<th width="1px">No.</th>
+						<th>Level</th>
+						<th width="70px">&nbsp;</th>
+					</tr>
 				</thead>
 				<tbody>
 				<?php
@@ -48,9 +52,10 @@ $popup_action = site_url().'shot-userlevel';
 				?>
 				</tbody>
 			</table>
+		  </form>
 			<div class=" pull-right">
 				<a class="btn btn-info bt-add-data" name="0"><span class="icon-plus icon-white"></span></a> 
-				<a class="btn btn-success bt-save-data" name="0"><span class="icon-hdd icon-white"></span> Simpan</a> 
+				<a class="btn btn-success bt-save-data" name="0"><label class="icon-hdd icon-white"></label>&nbsp;Simpan</a> 
 			</div><br/><br/>
 		</div>
 	</div>
@@ -60,34 +65,54 @@ $popup_action = site_url().'shot-userlevel';
 			<h2><i class="icon-picture"></i> HAK AKSES LEVEL</h2>
 		</div>
 		<div class="box-berita" style="padding:10px">
-			<table class="table">
+		  <form class="form-permission">
+		    <input type="hidden" name="action" value="save_permission">
+			<table class="table table-bordered">
 				<thead>
-					<th width="1px">No.</th>
-					<th>Menu</th>
-					<th>Link</th>
-					<th width="70px">&nbsp;</th>
+					<tr>
+						<th rowspan="2" width="1px">No.</th>
+						<th rowspan="2">Menu</th>
+						<th colspan="<?php echo count($levels); ?>"><center>Level</center></th>
+					</tr>
+					<tr>
+						<?php
+						foreach($levels as $level){
+							echo '<th><center>'.$level['level_name'].'</center></th>';
+						}
+						?>
+					</tr>
 				</thead>
 				<tbody>
 				<?php
 				$n = 1;
-				foreach($levels as $menu){
-					$id = $menu['menu_id'];
-					$icon = $menu['menu_icon'];
-					$link = $menu['menu_link'];
-					$level = $menu['menu_level'];
-					$title = '<span class="'.$icon.'" style="margin-left:'.($level*18).'px;"></span> '.$menu['menu_title'];
+				foreach($permission as $perm){
+					$id = $perm['menu_id'];
+					$title = $perm['menu_title'];
+					$status = $perm['permission'];
 					?>
 					<tr>
 						<td><center><?php echo $n++; ?></center><span class="rowstbl<?php echo $id; ?>"></span></td>
 						<td><span name="menu_title"><?php echo $title; ?></span></td>
-						<td><span name="menu_link"><?php echo $link; ?></span></td>
-						<td><?php echo Bottons($id); ?></td>
+						<?php
+						foreach($status as $stat){
+							$p = $stat['level_id'];
+							$c = ($stat[$p]==1)? 'checked="checked"' : '';
+							$hidde  = '<input type="hidden" name="menuid[]" value="'.$id.'">';
+							$hidde .= '<input type="hidden" name="levelid[]" value="'.$p.'">';
+							$check  = '<input type="checkbox" name="pilih['.$id.']['.$p.']" value="1" '.$c.'>';
+							echo '<td>'.$hidde.'<center>'.$check.'</center></td>';
+						}
+						?>
 					</tr>
 					<?php
 				}
 				?>
 				</tbody>
 			</table>
+		  </form>
+			<div class=" pull-right">
+				<a class="btn btn-success bt-save-perm" name="0"><label class="icon-hdd icon-white"></label>&nbsp;Simpan</a> 
+			</div><br/><br/>
 		</div>
 	</div>
 </div>
@@ -113,7 +138,7 @@ $(document).ready(function(){
 			}
 			
 			var dat = tar.html();
-			var txt = '<input type="hidden" name="lid" value="'+lid+'"><input type="text" class="span12" name="level" value="'+dat+'">';
+			var txt = '<input type="hidden" name="lid[]" value="'+lid+'"><input type="text" class="span12" name="level[]" value="'+dat+'">';
 			tar.html(txt);
 		});
 	}
@@ -137,6 +162,7 @@ $(document).ready(function(){
 						if(data['status']=='success'){
 							trn.remove();
 							sort_tabel_biasa(tbd);
+							location.href='userlevel';
 						}
 					});
 				}
@@ -144,87 +170,74 @@ $(document).ready(function(){
 		});
 	}
 	
-	//$('.bt-add-data').click(function());
-	
-	
-	
-	var modalz = '<div class="modalzWindow modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">\
-					<header class="modal-header">\
-						<a class="close modal-tutup">&times;</a>\
-						<h4></h4>\
-					</header>\
-					<div class="modal-body"></div>\
-					<footer class="modal-footer">\
-						<span class="pull-left">\
-							<a class="btn bt-modal-baru">Input Baru</a>\
-							<span class="modal-result"></span>\
-						</span>\
-						<a class="btn modal-tutup">Tutup</a>\
-						<a class="btn btn-success bt-zimpan">Simpan</a>\
-					</footer>\
-				  </div>';
-	$(".modalZ").html(modalz);
-	
-	$(".modalzWindow .bt-zimpan").click(function(){
+	$('.bt-save-data').click(function(){
 		var btn = $(this);
-		var pop = btn.parents('.modalzWindow');
-		var box = pop.parents('.bawah-datatabel').parent();
-		var tbl = box.find('.datatable');
-		var res = pop.find('.modal-result');
-		var mug = pop.find('.modal-body');
-		var frm = mug.find('form');
+		var ico = btn.children('label');
+		ico.removeClass('icon-hdd icon-white').addClass('spinner pull-left');
 		
-		// edit this
-		res.html('Sedang menyimpan...');
-		var urls = '<?php echo $popup_action; ?>';
-		var tipe = box.parent().attr('id');
+		var frm = $('.form-level');
+		var tbd = frm.find('table tbody');
 		var data = frm.serializeArray();
-		var menu = frm.find('input[name="menu_id"]');
-		
+		var urls = '<?php echo $popup_action; ?>';
 		var post = $.post(urls,data);
 		post.done(function(data){
 			data = $.parseJSON(data);
-			tbl  = tbl.dataTable();
-			if(data['status']=='insert'){
+			if(data['status']=='success'){
 				var buttons = $('.Bottons').val();
-			
-				var tds = [];
-				tds[0] = '<center>'+(tbl.fnGetData().length+1)+'</center><span class="rowstbl'+data['menu_id']+'"></span>';
-				tds[1] = '<span class="'+data['menu_icon']+'"></span> '+data['menu_title'];
-				tds[2] = data['menu_link'];
-				tds[3] = buttons;
-				
-				var last = tbl.fnAddData(tds);
-				var node = tbl.fnGetNodes(last[0]);
-				var edit = $(node).find('a.bt-edit-data');
-				var remv = $(node).find('a.bt-delete-data');
-				
-				menu.val(data['menu_id']);
-				edit.attr('name',data['menu_id']);
-				remv.attr('name',data['menu_id']);
-				action_edit(edit);
-				action_delete(remv);
-				
-				res.html('<font color="green">Tersimpan.</font>');
-			}else if(data['status']=='update'){
-				// change this
-				var fi = '.rowstbl'+data['menu_id'];
-				
-				var tr  = '';
-				var tx = tbl.fnGetNodes();
-				$(tx).each(function(){
-					var dm = $(this).find(fi);
-					if(dm.length>0) tr = dm.parent().parent();
-				});
-				var trpos = tbl.fnGetPosition(tr[0]);
+				tbd.html('');
+				var levels = $(data['levels']);
+				levels.each(function(index,value){
+					var level = value;
+					var tr = $('<tr>\
+							<td><center>'+(index+1)+'</center><span class="rowstbl'+level['level_id']+'"></span></td>\
+							<td><span class="level_name">'+level['level_name']+'</span></td>\
+							<td class="bt-action">'+buttons+'</td>\
+						</tr>');
+					var edit = tr.find('a.bt-edit-data');
+					var remv = tr.find('a.bt-delete-data');
+					edit.attr('name',level['level_id']);
+					remv.attr('name',level['level_id']);
+					action_edit(edit);
+					action_delete(remv);
+					tbd.append(tr);
 					
-				tbl.fnUpdate('<span class="'+data['menu_icon']+'"></span> '+data['menu_title'],trpos,1);
-				tbl.fnUpdate(data['menu_link'],trpos,2);
-				
-				res.html('<font color="green">Tersimpan.</font>');
+					ico.removeClass('spinner pull-left').addClass('icon-hdd icon-white');
+					location.href='userlevel';
+				});
 			}
 		});
+ 	});
+	
+	$('.bt-add-data').click(function(){
+		var tbd = $('.form-level table tbody');
+		var trs = tbd.children();
+		var len = trs.length;
+		var txt = '<input type="hidden" name="lid[]" value="0"><input type="text" class="span12" name="level[]" value="">';
+		var tr = $('<tr>\
+						<td><center>'+(len+1)+'</center><span class="rowstbl0"></span></td>\
+						<td><span class="level_name">'+txt+'</span></td>\
+						<td class="bt-action">&nbsp;</td>\
+					</tr>');
+		tbd.append(tr);
 	});
+	
+	$('.bt-save-perm').click(function(){
+		var btn = $(this);
+		var ico = btn.children('label');
+		ico.removeClass('icon-hdd icon-white').addClass('spinner pull-left');
+		
+		var frm = $('.form-permission');
+		var data = frm.serializeArray();
+		
+		var urls = '<?php echo $popup_action; ?>';
+		var post = $.post(urls,data);
+		post.done(function(data){
+			data = $.parseJSON(data);
+			if(data['status']=='success'){		
+				ico.removeClass('spinner pull-left').addClass('icon-hdd icon-white');
+			}
+		});
+ 	});
 	
 	function sort_tabel_biasa(tbody){
 		var trs = $(tbody).children('tr');
@@ -235,6 +248,5 @@ $(document).ready(function(){
 			nnn++;
 		});
 	}
-	
 });
 </script>

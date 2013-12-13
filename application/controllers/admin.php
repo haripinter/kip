@@ -174,6 +174,7 @@ class admin extends KIP_Controller {
 		$this->load->model('mod_userlevel/data_userlevel');
 		
 		$tmp['levels'] = $this->data_userlevel->get_all_level();
+		$tmp['permission'] = $this->data_userlevel->get_all_permission();
 		$data['content'] = $this->load->view('mod_userlevel/view_userlevel',$tmp,true);
 		$this->load->view($this->template,$data);
 	}
