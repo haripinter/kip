@@ -89,5 +89,11 @@ class data_user extends CI_Model{
 		$data = $this->mysql->query($sql);
 		return $this->get($user['id']);
 	}
+	
+	function change_level($user){
+		$sql  = "UPDATE dinamic_users SET user_level=".$user['level']." WHERE user_id=".$user['id'];
+		$data = $this->mysql->query($sql);
+		return $this->get($user['id']);
+	}
 }
 ?>

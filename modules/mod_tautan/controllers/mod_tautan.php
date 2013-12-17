@@ -3,7 +3,7 @@
 class mod_tautan extends KIP_Controller {
 
 	public function index(){
-		$this->allowed('root');
+		$this->allowed();
 		$this->load->model('data_tautan');
 		$this->load->model('mod_dokumen/data_dokumen');
 		

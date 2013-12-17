@@ -7,12 +7,6 @@ function Bottons($id){
 		</button>
 		<ul class="dropdown-menu pull-right">
 			<li>
-				<a class="bt bt-view-data" name="'.$id.'"><span class="icon-edit"></span> Detail</a>
-			</li>
-			<li>
-				<a class="bt bt-edit-data" name="'.$id.'"><span class="icon-edit"></span> Edit</a>
-			</li>
-			<li>
 				<a class="bt bt-delete-data" name="'.$id.'"><span class="icon-remove"></span> Delete</a>
 			</li>
 		</ul>
@@ -32,10 +26,27 @@ function Status($id,$stat){
 	return $str;
 }
 
+function Level($id,$l,$lev){
+	$level = level_user($lev);
+	$str = '<div class="btn-group bt-level-user">
+				<a class="btn bt-status-label">'.$level[$l].'</a>
+				<button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+				<ul class="dropdown-menu">';
+				foreach($level as $key=>$value){
+					$str .= '<li><a name="'.$id.'" level="'.$key.'">'.$value.'</a></li>';
+				}
+	$str .= '</ul>
+			</div>';
+	return $str;
+}
+
 $popup_action = site_url().'shot-user';
 ?>
 <style>
 	.bt-status-user{
+		cursor: pointer;
+	}
+	.bt-level-user{
 		cursor: pointer;
 	}
 </style>
@@ -49,9 +60,9 @@ $popup_action = site_url().'shot-user';
 				<thead>
 					<th width="1px">No.</th>
 					<th width="31px">Email</th>
-					<th>Level</th>
 					<th>Nama</th>
 					<th>Alamat</th>
+					<th>Level</th>
 					<th width="180px">Status</th>
 					<th width="70px">&nbsp;</th>
 				</thead>
@@ -62,17 +73,17 @@ $popup_action = site_url().'shot-user';
 						$id = $user['user_id'];
 						$nama = @$user['user_fullname'];
 						$email = @$user['user_email'];
-						$level = @$user['level_name'];
+						$level = Level($id,intval(@$user['level_id']),$levels);
 						$alamat = @$user['user_address'];
 						$status = Status($id,intval(@$user['user_status']));
 						?>
 						<tr>
 							<td><center><?php echo $n; ?></center><span class="rowstbl<?php echo $id; ?>"></span></td>
 							<td><?php echo $email; ?></td>
-							<td><?php echo $level; ?></td>
 							<td><?php echo $nama; ?></td>
 							<td><?php echo $alamat; ?></td>
-							<td><?php echo $status; ?>
+							<td><?php echo $level; ?></td>
+							<td><?php echo $status; ?></td>
 							<td><?php echo Bottons($id); ?></td>
 						</tr>
 						<?php
@@ -109,12 +120,25 @@ $(document).ready(function(){
 		});
 	});
 	
-	
-	$('.box-berita .nav-tabs li a').click(function(){
-		var sect = $($(this).attr('href'));
-		sect.addClass('active');
-		var tabs = sect.find('.datatable');
-		tabs.dataTable().fnAdjustColumnSizing();
+	$('.bt-level-user ul li a').click(function(){
+		var link = $(this);
+		var labl = link.parents('.bt-level-user').find('.bt-status-label');
+		var spin = '<div><div class="spinner pull-left"></div>&nbsp;</div >';
+		labl.html(spin);
+		
+		var duid = link.attr('name');
+		var dsta = link.attr('level');
+		var data = {action:'change_level', uid: duid, level: dsta};
+		var urls = '<?php echo $popup_action; ?>';
+		var post = $.post(urls, data);
+		post.done(function(data){
+			data = $.parseJSON(data);
+			console.log(labl)
+			console.log(data)
+			if(data['status']=='success'){
+				labl.html(data['level_name']);
+			}
+		});
 	});
 	
 	action_edit($('.datatable .bt-edit-data'));
@@ -159,7 +183,7 @@ $(document).ready(function(){
 			var urls = '<?php echo $popup_action; ?>';
 			var tipe = box.parent().attr('id');
 			var data = {action:'delete',id:this.name};
-			bootbox.confirm("Anda yakin akan menghapus Tautan ini?", function(result) {
+			bootbox.confirm("Anda yakin akan menghapus ini?", function(result) {
 				if(result==true){
 					var post = $.post(urls,data);
 					post.done(function(data){
@@ -183,7 +207,7 @@ $(document).ready(function(){
 			"sLengthMenu": "_MENU_ Tampilan Perhalaman"
 		}
 	});
-	$("div.bt-datatable-add").html('<a class="btn btn-info pull-right bt-add-data" name="0"><span class="icon-plus icon-white"></span> Tambah Data</a>');
+	//$("div.bt-datatable-add").html('<a class="btn btn-info pull-right bt-add-data" name="0"><span class="icon-plus icon-white"></span> Tambah Data</a>');
 	
 	var modalz = '<div class="modalzWindow modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">\
 					<header class="modal-header">\
@@ -209,22 +233,7 @@ $(document).ready(function(){
 		pop.modal('hide');
 	});
 	
-	/*
-	$(".modalzWindow .bt-modal-baru").click(function(){
-		var btn = $(this);
-		var box = btn.parents('.bawah-datatabel').parent();
-		var inp = box.find('input');
-		box.find('input[name="tautan_id"]').val(0);
-		box.find('input[name="title"]').val('');
-		box.find('input[name="link"]').val('');
-		box.find('select[name="tautan_option"]').val(0);
-		box.find('input[name="mediaid"]').val('');
-		box.find('span[name="txt_filename"]').html('');
-		box.find('select[name="status"]').val('on');
-		box.find('file[name="files[]"]').MultiFile('reset');
-	});*/
-	
-	$('.bt-datatable-add .bt-add-data').click(function(){
+	/*$('.bt-datatable-add .bt-add-data').click(function(){
 		var btn = $(this);
 		var box = btn.parents('.bawah-datatabel').parent();
 		var tbl = box.find('.datatable');
@@ -234,7 +243,7 @@ $(document).ready(function(){
 		
 		// edit this
 		mug.html('Tunggu...');
-		pop.find('h4').html('Tambah Tautan');
+		pop.find('h4').html('Tambah Pengguna');
 		var urls = '<?php echo $popup_action; ?>';
 		var data = {action:'edit',id:this.name};
 		
@@ -245,7 +254,7 @@ $(document).ready(function(){
 			action_upload(mug);
 			res.html('');
 		});
-	});
+	});*/
 	
 	$(".modalzWindow .bt-zimpan").click(function(){
 		var btn = $(this);
@@ -323,104 +332,6 @@ $(document).ready(function(){
 			
 		});
 	});
-	
-	function action_upload(dom){
-		'use strict';
-		var pop = dom.parents('.modalzWindow');
-		var res = pop.find('.modal-result');
-		var tar = dom.find('.fileupload');
-		var frm = dom.find('form');
-		var prv = frm.find('.tautan_thumbnail');
-		var tbl = $('.datatable');
-		tar.fileupload({
-			url: '<?php echo $popup_action; ?>',
-			dataType: 'json',
-			add: function (e, data) {
-				if($('.progress').hasClass('progress-danger')){
-					$('.progress').removeClass('progress-danger').addClass('progress-success');
-				}
-				
-				$('.txt_filename').html(data.files[0].name);
-				var btupload = $('.modalzWindow .bt-zimpan');
-				btupload.unbind('click');
-				btupload.click(function(){
-					if(btupload.hasClass('disabled')) return;
-					$('.progress').addClass('active').removeClass('hide');
-					data.submit();
-				});
-			},
-			submit: function (e, data){
-				data.formData = frm.serializeArray();
-			},
-			done: function (e, data) {
-				$('.progress .bar').css('');
-				$('.progress').removeClass('active');
-				var dota = data.result.files[0];
-				tbl  = tbl.dataTable();
-				
-				var preview = '';
-				if(typeof(dota.media_thumbnail) != "undefined" && dota.media_thumbnail !== null){
-					preview = dota.media_thumbnail+'?'+(Number(new Date()));
-					preview = '<img src="<?php echo site_url(); ?>'+preview+'" height="30px"></img>';
-				}
-				if(dota.thumbnailUrl!=''){
-					preview = '<img src="<?php echo site_url(); ?>'+dota.thumbnailUrl+'?'+(Number(new Date()))+'" height="30px"></img>';
-				}
-				prv.html(preview);
-				
-				if(dota.status=='insert'){
-					var buttons = $('.Bottons').val();
-					
-					var tds = [];
-					tds[0] = '<center>'+(tbl.fnGetData().length+1)+'</center><span class="rowstbl'+dota.tautan_id+'"></span>';
-					tds[1] = dota.tautan_title;
-					tds[2] = preview;
-					tds[3] = dota.tautan_link;
-					tds[4] = dota.tautan_option;
-					tds[5] = dota.tautan_status;
-					tds[6] = buttons;
-					
-					var last = tbl.fnAddData(tds);
-					var node = tbl.fnGetNodes(last[0]);
-					var edit = $(node).find('a.bt-edit-data');
-					var remv = $(node).find('a.bt-delete-data');
-					
-					taut.val(dota.tautan_id);
-					edit.attr('name',dota.tautan_id);
-					remv.attr('name',dota.tautan_id);
-					action_edit(edit);
-					action_delete(remv);
-					
-					res.html('<font color="green">Tersimpan.</font>');
-				}else if(dota.status=='update'){	
-					// change this
-					var fi = '.rowstbl'+dota.tautan_id;
-					
-					var tr  = '';
-					var tx = tbl.fnGetNodes();
-					$(tx).each(function(){
-						var dm = $(this).find(fi);
-						if(dm.length>0) tr = dm.parent().parent();
-					});
-					var trpos = tbl.fnGetPosition(tr[0]);
-					
-					tbl.fnUpdate(dota.tautan_title,trpos,1);
-					tbl.fnUpdate(preview,trpos,2);
-					tbl.fnUpdate(dota.tautan_link,trpos,3);
-					tbl.fnUpdate(dota.tautan_option,trpos,4);
-					tbl.fnUpdate(dota.tautan_status,trpos,5);
-					
-					res.html('<font color="green">Tersimpan.</font>');
-				}
-				
-			},
-			progress: function (e, data) {
-				var progress = parseInt(data.loaded / data.total * 100, 10);
-				$('.progress .bar').css('width', progress + '%');
-			}
-		}).prop('disabled', !$.support.fileInput)
-			.parent().addClass($.support.fileInput ? undefined : 'disabled');
-	}
 	
 	function sort_tabel(tbl){
 		var trs = tbl.fnGetNodes();

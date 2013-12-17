@@ -3,7 +3,7 @@
 class mod_halaman extends KIP_Controller {
 
 	public function index(){
-		$this->allowed('root');
+		$this->allowed();
 		$this->load->model('data_halaman');
 		
 		$id_user = $this->session->userdata('id');

@@ -47,6 +47,38 @@ class mod_user extends KIP_Controller {
 				}
 				
 				break;
+				
+			case 'change_level':
+				$this->allowed('root');
+				$tmp['id']    = intval($_POST['uid']);
+				$tmp['level'] = intval($_POST['level']);
+				$data = $this->data_user->change_level($tmp);
+				
+				if(is_numeric(@$data['user_level'])){
+					$level = $data['level_name'];
+					echo json_encode(array('status'=>'success',
+									'level_name'=>$level));
+				}
+				
+				break;
+				
+			case 'edit':
+				$this->allowed('root');
+				$id = intval(@$_POST['id']);
+				$data['user'] = $this->data_user->get($id);
+				$this->load->view('popup_input_user',$data);
+				break;
+				
+			case 'save':
+				$this->allowed('root');
+				break;
+			
+			case 'delete':
+				$this->allowed('root');
+				$id = intval(@$_POST['id']);
+				$dt = $this->data_user->delete($id);
+				if(count($dt)<1) echo json_encode(array('status'=>'success'));
+				break;
 		}
 	}
 	

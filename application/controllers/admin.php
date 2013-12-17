@@ -7,6 +7,8 @@ class admin extends KIP_Controller {
 	public function __construct(){
 		parent::__construct();
 		
+		$this->must_login();
+		
 		$uri = '';
 		$n   = $this->uri->total_segments();
 		for($a=0; $a<=$n; $a++){
@@ -175,8 +177,10 @@ class admin extends KIP_Controller {
 	
 	function pengguna(){
 		$this->load->model('mod_user/data_user');
+		$this->load->model('mod_userlevel/data_userlevel');
 		
 		$tmp['users'] = $this->data_user->get_all();
+		$tmp['levels'] = $this->data_userlevel->get_all_level();
 		$data['content'] = $this->load->view('mod_user/view_user',$tmp,true);
 		$this->load->view($this->template,$data);
 	}

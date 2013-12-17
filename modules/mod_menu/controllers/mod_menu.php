@@ -3,7 +3,7 @@
 class mod_menu extends KIP_Controller {
 
 	public function index(){
-		$this->allowed('root');
+		$this->allowed();
 		$this->load->model('data_menu');
 		
 		$type   = to_data(@$_POST['type']);

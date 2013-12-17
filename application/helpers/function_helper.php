@@ -104,4 +104,13 @@ function warna_status_user($w){
 			);
 	return $warna[$w];
 }
+
+function level_user($levels){
+	$tmp = array();
+	$tmp[0] = 'Anggota';
+	foreach($levels as $level){
+		$tmp[$level['level_id']] = $level['level_name'];
+	}
+	return $tmp;
+}
 ?>

@@ -39,7 +39,6 @@ class KIP_Controller extends CI_Controller {
 		
 		$this->config->set_item('marquee',$this->data_berita->get_marquee());
 		
-		
 	}
 	
 	function allowed($user='all'){
@@ -48,12 +47,12 @@ class KIP_Controller extends CI_Controller {
 		switch($user){
 			case 'all':
 				if(!is_numeric($id) && intval($id)==0){
-					restrict();
+					$this->restrict();
 				}
 				break;
 			case 'root':
 				if($level!='root'){
-					restrict();
+					$this->restrict();
 				}
 				break;
 		}
@@ -69,7 +68,7 @@ class KIP_Controller extends CI_Controller {
 		$level = $this->LEVEL;
 		switch($user){
 			case 'all':
-				if(!is_numeric($id) && intval($id)==0){
+				if(!is_numeric($id) || intval($id)==0){
 					redirect('login');
 					exit();
 				}

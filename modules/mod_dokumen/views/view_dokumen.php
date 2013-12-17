@@ -222,7 +222,7 @@ $(document).ready(function(){
 		
 		// edit this
 		mug.html('Tunggu...');
-		pop.find('h4').html('Tambah Tautan');
+		pop.find('h4').html('Tambah Dokumen');
 		var urls = '<?php echo $popup_action; ?>';
 		var data = {action:'edit',id:this.name};
 		

@@ -15,10 +15,14 @@ class data_menu extends CI_Model{
 		$query = '';
 		$perm  = $this->LEVEL;
 		$user  = $this->ID_USER;
-		if((string)$perm=='root'){
+		if($type=='public'){
 			$query = "SELECT * FROM dinamic_menus WHERE menu_type='".$type."' AND menu_parent=".$parent." ORDER BY menu_order";
 		}else{
-			$query = "SELECT * FROM dinamic_users,dinamic_userslevel,dinamic_userslevel_perm,dinamic_menus WHERE user_level=CAST(level_id AS CHAR(10)) AND perm_levelid=level_id AND menu_id=perm_menuid AND perm_grant='1' AND user_id=".$user." AND menu_type='".$type."' AND menu_parent=".$parent." ORDER BY menu_order";
+			if((string)$perm=='root'){
+				$query = "SELECT * FROM dinamic_menus WHERE menu_type='".$type."' AND menu_parent=".$parent." ORDER BY menu_order";
+			}else{
+				$query = "SELECT * FROM dinamic_users,dinamic_userslevel,dinamic_userslevel_perm,dinamic_menus WHERE user_level=CAST(level_id AS CHAR(10)) AND perm_levelid=level_id AND menu_id=perm_menuid AND perm_grant='1' AND user_id=".$user." AND menu_type='".$type."' AND menu_parent=".$parent." ORDER BY menu_order";
+			}
 		}
 		
 		$datas = $this->mysql->get_datas($query);
